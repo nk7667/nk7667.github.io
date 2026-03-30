@@ -1,14 +1,14 @@
 /* ==========================================================================
    Syntax highlighting
-   覆盖 MM 默认：原 $base00 深色底 + base16 浅色字；改为浅色底，细粒度着色见 custom.scss
+   与 custom.scss 一致：浅灰蓝底（非纯白）
    ========================================================================== */
 
 div.highlighter-rouge,
 figure.highlight {
   position: relative;
   margin-bottom: 1em;
-  background: #f6f8fa;
-  color: #24292f;
+  background: #e8ecf1;
+  color: #111827;
   font-family: $monospace;
   font-size: $type-size-6;
   line-height: 1.8;
@@ -35,8 +35,8 @@ figure.highlight {
     &.rouge-gutter {
       padding-right: 1em;
       width: 1em;
-      color: #6e7781;
-      border-right: 1px solid #d0d7de;
+      color: #4b5563;
+      border-right: 1px solid #c5ced9;
       text-align: right;
     }
 
@@ -56,7 +56,7 @@ figure.highlight {
 }
 
 .highlight .hll {
-  background-color: #fff8c5;
+  background-color: #dbe4f0;
 }
 
 /* Rouge 各 token 颜色由 custom.scss 中 .page__content .highlight 提供（浅色 GitHub 系） */

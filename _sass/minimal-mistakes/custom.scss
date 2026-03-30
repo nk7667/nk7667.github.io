@@ -13,12 +13,13 @@
 }
 
 /* -------------------------------------------------------------------------
-   代码块：仅浅色底（不用深色）；IBM Plex Mono + Rouge 语法色（浅底配色）
+   代码块：浅灰蓝底（非纯白）+ 提高对比度；IBM Plex Mono + Rouge
+   参考：GitHub Light / Nord Snow Storm 系，便于长时间阅读
    ------------------------------------------------------------------------- */
 $page__code-font: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-$page__code-bg: #f6f8fa;
-$page__code-border: #d0d7de;
-$page__code-fg: #24292f;
+$page__code-bg: #e8ecf1;
+$page__code-border: #c5ced9;
+$page__code-fg: #111827;
 
 .page__content div.highlighter-rouge,
 .page__content figure.highlight {
@@ -55,10 +56,10 @@ $page__code-fg: #24292f;
   border: 0 !important;
   border-radius: 0 !important;
   font-family: $page__code-font !important;
-  font-size: 0.8125rem !important;
+  font-size: 0.875rem !important;
   font-weight: 400 !important;
-  line-height: 1.62 !important;
-  letter-spacing: 0.02em;
+  line-height: 1.65 !important;
+  letter-spacing: 0.01em;
   color: $page__code-fg !important;
   tab-size: 4;
   -moz-tab-size: 4;
@@ -83,19 +84,19 @@ $page__code-fg: #24292f;
   background: $page__code-bg !important;
   padding: 1rem 1.15rem !important;
   font-family: $page__code-font !important;
-  font-size: 0.8125rem !important;
-  line-height: 1.62 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.65 !important;
   color: $page__code-fg !important;
 }
 
-/* Rouge（浅色 / GitHub Light 系） */
+/* Rouge：浅灰底上加深一级，避免发灰、看不清 */
 .page__content .highlight {
   .c,
   .c1,
   .cm,
   .cp,
   .cs {
-    color: #6e7781 !important;
+    color: #4b5563 !important;
     font-style: italic;
   }
   .k,
@@ -104,7 +105,7 @@ $page__code-fg: #24292f;
   .kn,
   .kp,
   .kr {
-    color: #cf222e !important;
+    color: #b91c1c !important;
   }
   .s,
   .s1,
@@ -112,7 +113,7 @@ $page__code-fg: #24292f;
   .sb,
   .sc,
   .sd {
-    color: #0a3069 !important;
+    color: #063986 !important;
   }
   .n,
   .na,
@@ -127,34 +128,34 @@ $page__code-fg: #24292f;
   .vc,
   .vg,
   .vi {
-    color: #953800 !important;
+    color: #7c2d12 !important;
   }
   .nf,
   .fm {
-    color: #8250df !important;
+    color: #5b21b6 !important;
   }
   .nc,
   .nn {
-    color: #953800 !important;
+    color: #7c2d12 !important;
   }
   .o,
   .ow {
-    color: #cf222e !important;
+    color: #b91c1c !important;
   }
   .mi,
   .mf,
   .mh,
   .il {
-    color: #0550ae !important;
+    color: #075985 !important;
   }
   .nt {
-    color: #116329 !important;
+    color: #166534 !important;
   }
   .p {
-    color: #24292f !important;
+    color: #111827 !important;
   }
   .err {
-    color: #cf222e !important;
+    color: #b91c1c !important;
   }
 }
 
@@ -168,9 +169,9 @@ $page__code-fg: #24292f;
   font-weight: 500 !important;
   padding: 0.12em 0.4em !important;
   border-radius: 4px !important;
-  background: #f0f3f6 !important;
-  border: 1px solid #d8dee4 !important;
-  color: #24292f !important;
+  background: #eef2f6 !important;
+  border: 1px solid #c5ced9 !important;
+  color: #111827 !important;
 }
 
 .page__content :not(pre) > code::before,

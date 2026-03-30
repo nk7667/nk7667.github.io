@@ -1,10 +1,11 @@
 /**
- * 代码块浅色底兜底（主题 _syntax.scss 曾为深色 $base00）
+ * 代码块：浅灰蓝底 + 深色字（与 custom / _syntax 一致）
  */
 .page__content div.highlighter-rouge,
 .page__content figure.highlight {
-  background: #f6f8fa !important;
-  color: #24292f !important;
+  background: #e8ecf1 !important;
+  color: #111827 !important;
+  border-color: #c5ced9 !important;
 }
 
 /**
