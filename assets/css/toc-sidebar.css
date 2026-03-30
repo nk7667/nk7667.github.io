@@ -1,0 +1,87 @@
+/**
+ * 侧栏目录 / 系列导航 — 纯 CSS，在 head/custom.html 中于 main.css 之后加载
+ * 解决：仅改 _sass 时 GitHub Pages 偶发不反映、或选择器未命中
+ */
+
+#main .sidebar.sidebar--stacked nav.toc.toc--sidebar.toc--doc,
+#main .sidebar.sidebar--stacked nav.toc.toc--sidebar.toc--series {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+#main .sidebar.sidebar--stacked nav.toc .nav__title {
+  color: #18181b !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+}
+
+#main .sidebar.sidebar--stacked nav.toc .toc__menu {
+  font-size: 1.0625rem !important;
+}
+
+#main .sidebar.sidebar--stacked nav.toc .toc__menu a,
+#main .sidebar.sidebar--stacked nav.toc .toc__menu a:link,
+#main .sidebar.sidebar--stacked nav.toc .toc__menu a:visited {
+  color: #3f3f46 !important;
+  font-size: 1.0625rem !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  border: 0 !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+#main .sidebar.sidebar--stacked nav.toc .toc__menu > li > a,
+#main .sidebar.sidebar--stacked nav.toc .toc__menu > li > a:link,
+#main .sidebar.sidebar--stacked nav.toc .toc__menu > li > a:visited {
+  color: #18181b !important;
+  font-weight: 600 !important;
+}
+
+#main .sidebar.sidebar--stacked nav.toc .toc__menu ul li > a,
+#main .sidebar.sidebar--stacked nav.toc .toc__menu ul li > a:link,
+#main .sidebar.sidebar--stacked nav.toc .toc__menu ul li > a:visited {
+  color: #52525b !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+}
+
+#main .sidebar.sidebar--stacked nav.toc .toc__menu ul ul li > a,
+#main .sidebar.sidebar--stacked nav.toc .toc__menu ul ul li > a:link,
+#main .sidebar.sidebar--stacked nav.toc .toc__menu ul ul li > a:visited {
+  color: #71717a !important;
+  font-size: 0.9375rem !important;
+}
+
+#main .sidebar.sidebar--stacked nav.toc .toc__menu li.active > a {
+  color: #18181b !important;
+  background: #e4e4e7 !important;
+  background-color: #e4e4e7 !important;
+  font-weight: 600 !important;
+}
+
+#main .sidebar.sidebar--stacked nav.toc.toc--series .series-nav__posts a,
+#main .sidebar.sidebar--stacked nav.toc.toc--series .series-nav__posts a:link,
+#main .sidebar.sidebar--stacked nav.toc.toc--series .series-nav__posts a:visited {
+  color: #3f3f46 !important;
+  font-size: 1.0625rem !important;
+}
+
+#main .sidebar.sidebar--stacked nav.toc.toc--series .series-nav__post.active a {
+  color: #18181b !important;
+  background: #e4e4e7 !important;
+}
+
+/* 无 #main 或类名差异时的兜底 */
+.sidebar nav.toc.toc--doc .toc__menu a:link,
+.sidebar nav.toc.toc--doc .toc__menu a:visited {
+  color: #3f3f46 !important;
+}
+
+.sidebar nav.toc.toc--doc .toc__menu > li > a:link,
+.sidebar nav.toc.toc--doc .toc__menu > li > a:visited {
+  color: #18181b !important;
+}
