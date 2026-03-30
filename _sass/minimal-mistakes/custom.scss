@@ -1,6 +1,8 @@
 /* 在 Minimal Mistakes 主题之上追加样式（会与主题 Sass 合并） */
 /* 文档：https://mmistakes.github.io/minimal-mistakes/docs/stylesheets/ */
 
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap");
+
 /* 正文标题旁的锚点链接（文案常为 “Permalink”）：不显示 */
 .page__content h1 .header-link,
 .page__content h2 .header-link,
@@ -9,4 +11,113 @@
 .page__content h5 .header-link,
 .page__content h6 .header-link {
   display: none !important;
+}
+
+/* -------------------------------------------------------------------------
+   代码块：卡片式浅色底 + JetBrains Mono（与 Rouge 高亮兼容）
+   ------------------------------------------------------------------------- */
+$page__code-font: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+$page__code-radius: 10px;
+$page__code-border: #d0d7de;
+$page__code-surface: #f6f8fb;
+$page__code-text: #0f172a;
+
+.page__content div.highlighter-rouge,
+.page__content figure.highlight {
+  margin: 1.35em 0 !important;
+  border-radius: $page__code-radius !important;
+  border: 1px solid $page__code-border !important;
+  background: linear-gradient(180deg, #fbfcfe 0%, $page__code-surface 100%) !important;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 24px rgba(15, 23, 42, 0.06) !important;
+  overflow: hidden !important;
+}
+
+/* 仅外层有 .highlighter-rouge 时，内层 .highlight 不再画第二道框 */
+.page__content div.highlighter-rouge .highlight {
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* 没有 Rouge 外层时，单独出现的 .highlight */
+.page__content > .highlight,
+.page__content p > .highlight {
+  margin: 1.35em 0 !important;
+  border-radius: $page__code-radius !important;
+  border: 1px solid $page__code-border !important;
+  background: linear-gradient(180deg, #fbfcfe 0%, $page__code-surface 100%) !important;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 24px rgba(15, 23, 42, 0.06) !important;
+  overflow: hidden !important;
+}
+
+.page__content .highlight pre,
+.page__content div.highlighter-rouge pre {
+  margin: 0 !important;
+  padding: 1rem 1.2rem 1.05rem !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  font-family: $page__code-font !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+  letter-spacing: 0.01em;
+  color: $page__code-text !important;
+  tab-size: 4;
+  -moz-tab-size: 4;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page__content .highlight pre code,
+.page__content div.highlighter-rouge pre code {
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  color: inherit !important;
+}
+
+/* 无 Rouge 包裹的裸 pre（少见） */
+.page__content > pre,
+.page__content blockquote pre {
+  border-radius: $page__code-radius !important;
+  border: 1px solid $page__code-border !important;
+  background: $page__code-surface !important;
+  padding: 1rem 1.2rem !important;
+  font-family: $page__code-font !important;
+  font-size: 0.875rem !important;
+  line-height: 1.65 !important;
+  color: $page__code-text !important;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06) !important;
+}
+
+/* 行内代码 */
+.page__content :not(pre) > code,
+.page__content p code,
+.page__content li code,
+.page__content td code {
+  font-family: $page__code-font !important;
+  font-size: 0.88em !important;
+  font-weight: 500 !important;
+  padding: 0.14em 0.45em !important;
+  border-radius: 6px !important;
+  background: #eef2ff !important;
+  border: 1px solid #e0e7ff !important;
+  color: #3730a3 !important;
+}
+
+.page__content :not(pre) > code::before,
+.page__content :not(pre) > code::after,
+.page__content p code::before,
+.page__content p code::after {
+  content: none !important;
+  letter-spacing: 0 !important;
 }
