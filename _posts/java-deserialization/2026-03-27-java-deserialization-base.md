@@ -1,5 +1,6 @@
 ---
-title: "基础"
+title: "Java 反序列化 · 基础"
+series_order: 1
 date: 2026-03-27 12:00:00 +0800
 categories:
   - java反序列化

@@ -1,0 +1,31 @@
+{% comment %}
+  同分类下的系列导航：展示「类目 → 各篇」层级（需 front matter 中 series_order 控制顺序）
+{% endcomment %}
+{% if page.categories and page.categories.size > 0 %}
+  {% assign cat_key = page.categories[0] %}
+  {% assign posts_in_cat = site.categories[cat_key] %}
+  {% if posts_in_cat and posts_in_cat.size > 1 %}
+    {% assign series_posts = posts_in_cat | sort: 'series_order' %}
+    <div class="sidebar-series">
+      <nav class="toc toc--sidebar toc--doc toc--series" aria-label="系列导航">
+        <header class="toc--doc__head">
+          <h4 class="nav__title toc--doc__title">
+            <span class="toc--doc__title-text">系列</span>
+          </h4>
+        </header>
+        <ul class="toc__menu series-nav__tree">
+          <li class="series-nav__folder">
+            <span class="series-nav__folder-label">{{ cat_key }}</span>
+            <ul class="series-nav__posts">
+              {% for sp in series_posts %}
+                <li class="series-nav__post{% if sp.url == page.url %} active{% endif %}">
+                  <a href="{{ sp.url | relative_url }}">{{ sp.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  {% endif %}
+{% endif %}

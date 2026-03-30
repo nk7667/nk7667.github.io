@@ -225,6 +225,69 @@ html {
   padding: 0.35rem 0.65rem !important;
 }
 
+/* 系列：类目 → 各篇（文件夹式层级） */
+.sidebar--stacked .sidebar-series {
+  flex: 0 0 auto;
+  margin-top: 0.85rem;
+}
+
+.sidebar--stacked .toc--series .toc--doc__title-text {
+  border-left-color: #b45309;
+}
+
+.sidebar--stacked .series-nav__tree {
+  margin: 0 !important;
+  padding: 0.25rem 0 0 !important;
+  list-style: none !important;
+}
+
+.sidebar--stacked .series-nav__folder {
+  margin: 0 !important;
+  list-style: none !important;
+}
+
+.sidebar--stacked .series-nav__folder-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #374151;
+  padding: 0.35rem 0.35rem 0.35rem 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.sidebar--stacked .series-nav__posts {
+  margin: 0 0 0 0.5rem !important;
+  padding: 0 0 0 0.75rem !important;
+  border-left: 2px solid #e5e7eb;
+  list-style: none !important;
+}
+
+.sidebar--stacked .series-nav__post {
+  margin: 0 !important;
+}
+
+.sidebar--stacked .series-nav__post a {
+  display: block;
+  padding: 0.28rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #4b5563;
+  text-decoration: none;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.sidebar--stacked .series-nav__post a:hover {
+  color: #111827;
+  background: #f3f4f6;
+}
+
+.sidebar--stacked .series-nav__post.active a {
+  color: #0f766e;
+  background: #ecfdf5;
+  font-weight: 600;
+}
+
 .sidebar--stacked .sidebar-toc {
   flex: 1 1 auto;
   min-height: 0;

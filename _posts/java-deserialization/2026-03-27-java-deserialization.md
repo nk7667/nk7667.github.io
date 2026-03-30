@@ -1,6 +1,7 @@
 ---
-title: "fastjson"
-date: 2026-03-27 12:00:00 +0800
+title: "Java 反序列化 · fastjson"
+series_order: 2
+date: 2026-03-27 12:00:01 +0800
 categories:
   - java反序列化
 ---

@@ -4,6 +4,8 @@
       {% include author-profile.html %}
     {% endif %}
 
+    {% include series-nav.html %}
+
     {% if page.toc %}
       <div class="sidebar-toc">
         <nav class="toc toc--sidebar toc--doc" aria-label="{{ page.toc_label | default: '本页目录' }}">
