@@ -1,5 +1,9 @@
-title: YOUR_NAME 的博客
+title: nk7
 description: 记录学习与实践
 theme: minima
 lang: zh-CN
 timezone: Asia/Shanghai
+
+# Minima 默认会把「所有页面」放进顶部导航；显式列出后只显示这些链接
+header_pages:
+  - about.md
