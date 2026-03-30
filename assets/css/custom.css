@@ -72,6 +72,239 @@
   display: none !important;
 }
 
+/*
+ * Markdown / 正文排版：参考 GitHub Markdown、技术博客常见可读性设置
+ * 字体：Noto Serif SC（中文正文）、Noto Sans SC（界面）、JetBrains Mono（代码）
+ */
+:root {
+  --md-text: #1f2328;
+  --md-muted: #59636e;
+  --md-border: #d1d9e0;
+  --md-code-bg: #f6f8fa;
+  --md-accent: #0969da;
+  --md-quote-border: #0969da;
+  --md-radius: 8px;
+  --md-content-max: 52rem;
+}
+
+body {
+  font-family: "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--md-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 正文区域：衬线 + 舒适行高（长文阅读） */
+.post-content,
+.page-content {
+  font-family: "Noto Serif SC", "Noto Sans SC", "Source Han Serif SC", serif;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  max-width: var(--md-content-max);
+  color: var(--md-text);
+  overflow-x: auto;
+}
+
+.post-content > *:first-child,
+.page-content > *:first-child {
+  margin-top: 0;
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.page-content h1,
+.page-content h2,
+.page-content h3,
+.page-content h4 {
+  font-family: "Noto Sans SC", sans-serif;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-top: 1.75em;
+  margin-bottom: 0.65em;
+  letter-spacing: -0.02em;
+  color: #0d1117;
+}
+
+.post-content h1,
+.page-content h1 {
+  font-size: 1.75rem;
+  border-bottom: 1px solid var(--md-border);
+  padding-bottom: 0.35em;
+}
+
+.post-content h2,
+.page-content h2 {
+  font-size: 1.4rem;
+  border-bottom: 1px solid #e8edf2;
+  padding-bottom: 0.25em;
+}
+
+.post-content h3,
+.page-content h3 {
+  font-size: 1.2rem;
+}
+
+.post-content p,
+.page-content p {
+  margin: 0.85em 0;
+}
+
+.post-content ul,
+.post-content ol,
+.page-content ul,
+.page-content ol {
+  margin: 0.85em 0;
+  padding-left: 1.5em;
+}
+
+.post-content li + li,
+.page-content li + li {
+  margin-top: 0.35em;
+}
+
+.post-content blockquote,
+.page-content blockquote {
+  margin: 1em 0;
+  padding: 0.35em 0 0.35em 1em;
+  border-left: 4px solid var(--md-quote-border);
+  color: var(--md-muted);
+  background: rgba(9, 105, 218, 0.04);
+  border-radius: 0 var(--md-radius) var(--md-radius) 0;
+}
+
+.post-content blockquote p,
+.page-content blockquote p {
+  margin: 0.5em 0;
+}
+
+.post-content hr,
+.page-content hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--md-border), transparent);
+  margin: 2rem 0;
+}
+
+/* 行内代码 */
+.post-content code,
+.page-content code {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.88em;
+  padding: 0.15em 0.45em;
+  border-radius: 6px;
+  background: var(--md-code-bg);
+  border: 1px solid #e8edf2;
+}
+
+.post-content pre,
+.page-content pre {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  padding: 1rem 1.1rem;
+  border-radius: var(--md-radius);
+  background: #0d1117;
+  color: #e6edf3;
+  border: 1px solid #30363d;
+  overflow-x: auto;
+}
+
+.post-content pre code,
+.page-content pre code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Rouge / highlighter 包裹层 */
+.post-content .highlight,
+.page-content .highlight {
+  margin: 1.1em 0;
+  border-radius: var(--md-radius);
+  overflow: hidden;
+  border: 1px solid #30363d;
+}
+
+.post-content .highlight pre,
+.page-content .highlight pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+/* 表格（GitHub 风格浅色） */
+.post-content table,
+.page-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.1em 0;
+  font-size: 0.95rem;
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+.post-content th,
+.post-content td,
+.page-content th,
+.page-content td {
+  border: 1px solid var(--md-border);
+  padding: 0.55em 0.75em;
+}
+
+.post-content th,
+.page-content th {
+  background: #f6f8fa;
+  font-weight: 600;
+  text-align: left;
+}
+
+.post-content tr:nth-child(even),
+.page-content tr:nth-child(even) {
+  background: #fafbfc;
+}
+
+/* 文章页标题区 */
+.post-header .post-title {
+  font-family: "Noto Sans SC", sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.post-header .post-meta {
+  color: var(--md-muted);
+  font-size: 0.95rem;
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+/* 首页正文（index.md） */
+.home-main {
+  font-family: "Noto Serif SC", "Noto Sans SC", serif;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--md-text);
+}
+
+.home-main h1,
+.home-main h2 {
+  font-family: "Noto Sans SC", sans-serif;
+  font-weight: 700;
+  color: #0d1117;
+}
+
+.home-main h2 {
+  margin-top: 1.5em;
+  font-size: 1.25rem;
+}
+
+.home-main ul {
+  padding-left: 1.4em;
+}
+
+.home-main a {
+  color: var(--md-accent);
+}
+
 /* 首页：主内容 + 侧边栏 */
 .page-with-sidebar {
   display: flex;
