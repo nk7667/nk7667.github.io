@@ -245,7 +245,7 @@ html {
   display: block;
   padding: 0.35rem 0.5rem;
   border-radius: 6px;
-  font-size: 0.9375rem;
+  font-size: 1.0625rem;
   font-weight: 500;
   color: #3f3f46;
   text-decoration: none;
@@ -296,7 +296,7 @@ html {
 .sidebar--stacked .toc--doc .toc--doc__title {
   margin: 0 !important;
   padding: 0 0 0.55rem 0 !important;
-  font-size: 1.05rem !important;
+  font-size: 1.125rem !important;
   font-weight: 700 !important;
   letter-spacing: -0.02em !important;
   text-transform: none !important;
@@ -319,7 +319,7 @@ html {
   overflow-y: auto;
   overflow-x: hidden;
   flex: 1 1 auto;
-  font-size: 0.9375rem !important;
+  font-size: 1.0625rem !important;
   line-height: 1.55 !important;
   scrollbar-width: thin;
   scrollbar-color: #d4d4d8 transparent;
@@ -346,7 +346,7 @@ html {
 /* 一级（h2） */
 .sidebar--stacked .toc--doc .toc__menu > li > a {
   font-weight: 600 !important;
-  font-size: 0.95rem !important;
+  font-size: 1.0625rem !important;
   color: #18181b !important;
 }
 
@@ -360,7 +360,7 @@ html {
   outline: none !important;
   color: #3f3f46 !important;
   font-weight: 500 !important;
-  font-size: 0.95rem !important;
+  font-size: 1.0625rem !important;
   text-decoration: none !important;
   word-break: break-word !important;
   overflow-wrap: anywhere !important;
@@ -393,7 +393,7 @@ html {
 .sidebar--stacked .toc--doc .toc__menu ul li > a {
   font-weight: 400 !important;
   color: #52525b !important;
-  font-size: 0.9rem !important;
+  font-size: 1rem !important;
 }
 
 .sidebar--stacked .toc--doc .toc__menu ul ul {
@@ -401,7 +401,7 @@ html {
 }
 
 .sidebar--stacked .toc--doc .toc__menu ul ul li > a {
-  font-size: 0.875rem !important;
+  font-size: 0.9375rem !important;
   color: #71717a !important;
 }
 
@@ -413,4 +413,20 @@ html {
   .sidebar--stacked .sidebar-toc {
     max-height: 40vh;
   }
+}
+
+/* 侧栏：强制覆盖浏览器默认链接蓝、全局 a:visited（custom 最后加载） */
+.sidebar.sidebar--stacked nav.toc ul.toc__menu a:link,
+.sidebar.sidebar--stacked nav.toc ul.toc__menu a:visited {
+  color: #3f3f46 !important;
+}
+
+.sidebar.sidebar--stacked nav.toc ul.toc__menu > li > a:link,
+.sidebar.sidebar--stacked nav.toc ul.toc__menu > li > a:visited {
+  color: #18181b !important;
+}
+
+.sidebar.sidebar--stacked nav.toc.toc--series .series-nav__posts a:link,
+.sidebar.sidebar--stacked nav.toc.toc--series .series-nav__posts a:visited {
+  color: #3f3f46 !important;
 }

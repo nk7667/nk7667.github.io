@@ -535,19 +535,25 @@
   padding: 0;
   width: 100%;
   list-style: none;
-  font-size: $type-size-6;
+  /* 原主题在 $large 下用 $type-size-7（约 11px）会过小，这里与正文可读性对齐 */
+  font-size: $type-size-5;
 
   @include breakpoint($large) {
-    font-size: $type-size-7;
+    font-size: $type-size-5;
   }
 
   a {
     display: block;
     padding: 0.25rem 0.75rem;
-    color: $muted-text-color;
     font-weight: bold;
     line-height: 1.5;
     border-bottom: 0;
+    /* 覆盖全局 a:link 浏览器默认蓝、:visited 主题色 */
+    &,
+    &:link,
+    &:visited {
+      color: $text-color;
+    }
 
     &:hover {
       color: $text-color;
