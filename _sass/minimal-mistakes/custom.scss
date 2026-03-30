@@ -121,3 +121,60 @@ $page__code-text: #0f172a;
   content: none !important;
   letter-spacing: 0 !important;
 }
+
+/* -------------------------------------------------------------------------
+   本页目录（TOC）：根据 h2–h5 生成，放在正文左侧 + 可粘性滚动
+   ------------------------------------------------------------------------- */
+.page__content--with-toc {
+  @include breakpoint($large) {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+}
+
+.page__content--with-toc .toc-sidebar.sidebar__right {
+  @include breakpoint($large) {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    float: none !important;
+    width: 13.75rem !important;
+    min-width: 11rem;
+    max-width: 17.5rem;
+    flex: 0 0 13.75rem;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 1;
+
+    &.sticky {
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 2em;
+      align-self: flex-start;
+      max-height: calc(100vh - 3.5em);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .toc {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.page__content--with-toc .page__main-doc {
+  flex: 1;
+  min-width: 0;
+}
+
+@include breakpoint(max-width $large - 1px) {
+  .page__content--with-toc .toc-sidebar.sidebar__right {
+    width: 100% !important;
+    max-width: none;
+    flex: 1 1 auto;
+    margin-bottom: 1em !important;
+  }
+}
