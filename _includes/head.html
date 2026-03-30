@@ -1,0 +1,6 @@
+{%- seo -%}
+{%- feed_meta -%}
+<link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
+{%- if jekyll.environment == 'production' and site.google_analytics -%}
+{%- include google-analytics.html -%}
+{%- endif -%}

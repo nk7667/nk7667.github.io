@@ -1,0 +1,69 @@
+/* 首页：主内容 + 侧边栏 */
+.page-with-sidebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+  align-items: flex-start;
+}
+
+.site-sidebar {
+  flex: 0 0 220px;
+  position: sticky;
+  top: 1rem;
+  padding: 1rem 1rem 1.1rem;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  background: #fafafa;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.sidebar-heading {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.sidebar-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-nav li {
+  margin: 0.4rem 0;
+}
+
+.sidebar-nav a {
+  color: #2a7ae2;
+  text-decoration: none;
+}
+
+.sidebar-nav a:hover {
+  text-decoration: underline;
+}
+
+.home-main {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+
+.home-main .post {
+  margin-bottom: 0;
+}
+
+@media (max-width: 700px) {
+  .page-with-sidebar {
+    flex-direction: column;
+  }
+
+  .site-sidebar {
+    flex: 1 1 auto;
+    position: static;
+    width: 100%;
+  }
+}
