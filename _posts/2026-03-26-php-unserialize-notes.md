@@ -5,4 +5,4 @@ date: 2026-03-26 20:00:00 +0800
 categories: [web, security, php]
 ---
 
-{% include_relative '../php-unserialize-notes.md' %}
+{% include php-unserialize-notes.md %}
