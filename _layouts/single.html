@@ -39,21 +39,9 @@ layout: default
         </header>
       {% endunless %}
 
-      <section class="page__content{% if page.toc %} page__content--with-toc{% endif %}" itemprop="text">
-        {% if page.toc %}
-          <aside class="sidebar__right toc-sidebar {% if page.toc_sticky %}sticky{% endif %}">
-            <nav class="toc" aria-label="{{ page.toc_label | default: '本页目录' }}">
-              <header><h4 class="nav__title"><i class="fas fa-{{ page.toc_icon | default: 'list-ul' }}"></i> {{ page.toc_label | default: site.data.ui-text[site.locale].toc_label | default: "本页目录" }}</h4></header>
-              {% include toc.html sanitize=true html=content h_min=2 h_max=5 class="toc__menu" skip_no_ids=true %}
-            </nav>
-          </aside>
-          <div class="page__main-doc">
-        {% endif %}
+      <section class="page__content" itemprop="text">
         {{ content }}
         {% if page.link %}<div><a href="{{ page.link }}" class="btn btn--primary">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>{% endif %}
-        {% if page.toc %}
-          </div>
-        {% endif %}
       </section>
 
       <footer class="page__meta">

