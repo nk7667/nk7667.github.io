@@ -19,7 +19,8 @@
 $page__code-font: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 $page__code-bg: #e8ecf1;
 $page__code-border: #c5ced9;
-$page__code-fg: #111827;
+/* 正文代码默认字色：与 Rouge GitHub 主题 fgDefault 一致（Primer gray-9） */
+$page__code-fg: #24292f;
 
 .page__content div.highlighter-rouge,
 .page__content figure.highlight {
@@ -89,73 +90,146 @@ $page__code-fg: #111827;
   color: $page__code-fg !important;
 }
 
-/* Rouge：浅灰底上加深一级，避免发灰、看不清 */
+/* Rouge：与 Rouge 内置 Themes::Github（Primer）token 语义一致，勿把「关键字 / 运算符 / 类名」混成一色
+   参考：https://github.com/rouge-ruby/rouge/blob/master/lib/rouge/themes/github.rb
+   Keyword.Type 与 Pygments「github-light-default」对齐（与 GitHub VS Code Light 同源） */
 .page__content .highlight {
+  $gh-keyword: #cf222e;
+  $gh-constant: #0550ae;
+  $gh-string: #0a3069;
+  $gh-entity: #8250df;
+  $gh-variable: #953800;
+  $gh-tag: #116329;
+  $gh-comment: #6e7781;
+  $gh-fg: #24292f;
+  $gh-keyword-type: #953800;
+
   .c,
   .c1,
   .cm,
-  .cp,
   .cs {
-    color: #4b5563 !important;
+    color: $gh-comment !important;
     font-style: italic;
   }
+
+  /* 预处理器注释（如 #include）在 VS Code GitHub Light 中偏关键字红 */
+  .cp {
+    color: $gh-keyword !important;
+    font-style: normal !important;
+  }
+
   .k,
-  .kc,
   .kd,
   .kn,
   .kp,
   .kr {
-    color: #b91c1c !important;
+    color: $gh-keyword !important;
   }
+
+  /* Keyword.Constant：true/final 等 — 与 theme 一致为 constant 蓝，勿与 .k 同色 */
+  .kc {
+    color: $gh-constant !important;
+  }
+
+  /* Keyword.Type：int、void 等 — Pygments github-light-default */
+  .kt {
+    color: $gh-keyword-type !important;
+  }
+
   .s,
   .s1,
   .s2,
-  .sb,
-  .sc,
-  .sd {
-    color: #063986 !important;
+  .sx,
+  .sh,
+  .sr,
+  .ss {
+    color: $gh-string !important;
   }
+
+  /* Literal::String::Backtick — theme 归为 constant */
+  .sb {
+    color: $gh-constant !important;
+  }
+
+  .sd {
+    color: $gh-comment !important;
+    font-style: italic !important;
+  }
+
+  .sc {
+    color: $gh-fg !important;
+  }
+
+  /* Operator — theme 为 constant 蓝，勿与 Keyword 红混用（否则 Java 整段「发红」） */
+  .o,
+  .ow {
+    color: $gh-constant !important;
+  }
+
+  .l,
+  .m,
+  .mi,
+  .mf,
+  .mh,
+  .mo,
+  .il {
+    color: $gh-constant !important;
+  }
+
+  /* Name：默认正文色，勿与类名/命名空间同色 */
   .n,
-  .na,
-  .nb,
-  .bp,
-  .no,
-  .nl,
   .ni,
-  .nx,
+  .nx {
+    color: $gh-fg !important;
+  }
+
+  .nb,
+  .nc,
+  .nn,
+  .no {
+    color: $gh-variable !important;
+  }
+
+  .na,
+  .nt {
+    color: $gh-tag !important;
+  }
+
+  .nf,
+  .fm,
+  .nd {
+    color: $gh-entity !important;
+  }
+
+  .nl,
+  .ne,
   .py,
   .nv,
   .vc,
   .vg,
   .vi {
-    color: #7c2d12 !important;
+    color: $gh-constant !important;
   }
-  .nf,
-  .fm {
-    color: #5b21b6 !important;
+
+  .bp {
+    color: $gh-constant !important;
   }
-  .nc,
-  .nn {
-    color: #7c2d12 !important;
-  }
-  .o,
-  .ow {
-    color: #b91c1c !important;
-  }
-  .mi,
-  .mf,
-  .mh,
-  .il {
-    color: #075985 !important;
-  }
-  .nt {
-    color: #166534 !important;
-  }
+
   .p {
-    color: #111827 !important;
+    color: $gh-fg !important;
   }
+
   .err {
-    color: #b91c1c !important;
+    color: $gh-keyword !important;
+  }
+
+  /* theme：Literal::String::Interpol 与 Name::Entity 为 fgDefault */
+  .si {
+    color: $gh-fg !important;
+  }
+
+  .se {
+    color: $gh-string !important;
   }
 }
 
@@ -171,7 +245,7 @@ $page__code-fg: #111827;
   border-radius: 4px !important;
   background: #eef2f6 !important;
   border: 1px solid #c5ced9 !important;
-  color: #111827 !important;
+  color: #24292f !important;
 }
 
 .page__content :not(pre) > code::before,
