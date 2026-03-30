@@ -40,6 +40,36 @@ $page__code-fg: #24292f;
   box-shadow: none !important;
 }
 
+/* Rouge 仅输出 <pre class="highlight"><code>、无 div.highlighter-rouge 时：
+   「.highlight pre」不会命中 pre 自身，否则会沿用主题里 .highlight 的浅色字 + 深色底逻辑 */
+.page__content pre.highlight {
+  margin: 1.35em 0 !important;
+  border-radius: 8px !important;
+  border: 1px solid $page__code-border !important;
+  background: $page__code-bg !important;
+  box-shadow: 0 1px 0 rgba(27, 31, 36, 0.04) !important;
+  overflow: hidden !important;
+  padding: 1rem 1.15rem 1.1rem !important;
+  font-family: $page__code-font !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+  letter-spacing: 0.01em;
+  color: $page__code-fg !important;
+  tab-size: 4;
+  -moz-tab-size: 4;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page__content pre.highlight code {
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
 .page__content > .highlight,
 .page__content p > .highlight {
   margin: 1.35em 0 !important;

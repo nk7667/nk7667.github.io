@@ -1,8 +1,10 @@
 /**
  * 代码块：浅灰蓝底 + 深色字（与 custom / _syntax 一致）
+ * 含无 div.highlighter-rouge 的 <pre class="highlight">（见 custom.scss 注释）
  */
 .page__content div.highlighter-rouge,
-.page__content figure.highlight {
+.page__content figure.highlight,
+.page__content pre.highlight {
   background: #e8ecf1 !important;
   color: #24292f !important;
   border-color: #c5ced9 !important;
