@@ -23,7 +23,9 @@ $page__code-border: #c5ced9;
 $page__code-fg: #24292f;
 
 .page__content div.highlighter-rouge,
-.page__content figure.highlight {
+.page__content figure.highlight,
+#main article.page .page__content div.highlighter-rouge,
+#main article.page .page__content figure.highlight {
   margin: 1.35em 0 !important;
   border-radius: 8px !important;
   border: 1px solid $page__code-border !important;
@@ -32,7 +34,8 @@ $page__code-fg: #24292f;
   overflow: hidden !important;
 }
 
-.page__content div.highlighter-rouge .highlight {
+.page__content div.highlighter-rouge .highlight,
+#main article.page .page__content div.highlighter-rouge .highlight {
   margin: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
@@ -42,7 +45,8 @@ $page__code-fg: #24292f;
 
 /* Rouge 仅输出 <pre class="highlight"><code>、无 div.highlighter-rouge 时：
    「.highlight pre」不会命中 pre 自身，否则会沿用主题里 .highlight 的浅色字 + 深色底逻辑 */
-.page__content pre.highlight {
+.page__content pre.highlight,
+#main article.page .page__content pre.highlight {
   margin: 1.35em 0 !important;
   border-radius: 8px !important;
   border: 1px solid $page__code-border !important;
@@ -62,7 +66,8 @@ $page__code-fg: #24292f;
   -webkit-overflow-scrolling: touch;
 }
 
-.page__content pre.highlight code {
+.page__content pre.highlight code,
+#main article.page .page__content pre.highlight code {
   padding: 0 !important;
   background: transparent !important;
   border: 0 !important;
@@ -71,7 +76,9 @@ $page__code-fg: #24292f;
 }
 
 .page__content > .highlight,
-.page__content p > .highlight {
+.page__content p > .highlight,
+#main article.page .page__content > .highlight,
+#main article.page .page__content p > .highlight {
   margin: 1.35em 0 !important;
   border-radius: 8px !important;
   border: 1px solid $page__code-border !important;
@@ -80,7 +87,9 @@ $page__code-fg: #24292f;
 }
 
 .page__content .highlight pre,
-.page__content div.highlighter-rouge pre {
+.page__content div.highlighter-rouge pre,
+#main article.page .page__content .highlight pre,
+#main article.page .page__content div.highlighter-rouge pre {
   margin: 0 !important;
   padding: 1rem 1.15rem 1.1rem !important;
   background: transparent !important;
@@ -99,7 +108,9 @@ $page__code-fg: #24292f;
 }
 
 .page__content .highlight pre code,
-.page__content div.highlighter-rouge pre code {
+.page__content div.highlighter-rouge pre code,
+#main article.page .page__content .highlight pre code,
+#main article.page .page__content div.highlighter-rouge pre code {
   padding: 0 !important;
   background: transparent !important;
   border: 0 !important;
@@ -109,7 +120,9 @@ $page__code-fg: #24292f;
 }
 
 .page__content > pre,
-.page__content blockquote pre {
+.page__content blockquote pre,
+#main article.page .page__content > pre,
+#main article.page .page__content blockquote pre {
   border-radius: 8px !important;
   border: 1px solid $page__code-border !important;
   background: $page__code-bg !important;
@@ -122,8 +135,10 @@ $page__code-fg: #24292f;
 
 /* Rouge：与 Rouge 内置 Themes::Github（Primer）token 语义一致，勿把「关键字 / 运算符 / 类名」混成一色
    参考：https://github.com/rouge-ruby/rouge/blob/master/lib/rouge/themes/github.rb
-   Keyword.Type 与 Pygments「github-light-default」对齐（与 GitHub VS Code Light 同源） */
-.page__content .highlight {
+   Keyword.Type 与 Pygments「github-light-default」对齐（与 GitHub VS Code Light 同源）
+   带 #main article.page：盖过远程主题里带 #main 的 .highlight / pre code 浅色字规则 */
+.page__content .highlight,
+#main article.page .page__content .highlight {
   $gh-keyword: #cf222e;
   $gh-constant: #0550ae;
   $gh-string: #0a3069;
