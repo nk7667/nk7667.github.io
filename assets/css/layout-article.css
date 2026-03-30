@@ -1,6 +1,6 @@
 /**
- * 代码块：浅灰蓝底 + 深色字（与 custom / _syntax 一致）
- * 含无 div.highlighter-rouge 的 <pre class="highlight">（见 custom.scss 注释）
+ * 代码块：深色底（与 _syntax.scss Base16 $base00 一致）
+ * 勿在此写 color，避免 !important 盖住 token 着色
  */
 .page__content div.highlighter-rouge,
 .page__content figure.highlight,
@@ -8,14 +8,12 @@
 #main article.page .page__content div.highlighter-rouge,
 #main article.page .page__content figure.highlight,
 #main article.page .page__content pre.highlight {
-  background: #e8ecf1 !important;
-  color: #24292f !important;
-  border-color: #c5ced9 !important;
+  background: #263238 !important;
+  border: 1px solid #546e7a !important;
 }
 
 /**
  * 文章主栏加宽（与 _sass/minimal-mistakes/_page.scss 一致，纯 CSS 兜底）
- * MM 默认 .page 有与侧栏等宽的 padding-right，未用右侧栏时右侧空白过大
  */
 @media (min-width: 1024px) {
   #main > article.page,
