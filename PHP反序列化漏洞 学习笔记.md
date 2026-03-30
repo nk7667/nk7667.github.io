@@ -7,31 +7,23 @@
 ```php
 class demo {
     // 成员变量（属性）
-    var $name = "juran";
+    var $name = "NK7";
     var $sex;
     
     // 成员函数（方法）
-    function jr() {
+    function NK7() {
         echo $this->name;
-    }
+    } 
 }
 
 // 实例化对象
 $d = new demo();
-$d->jr();
+$d->NK7();
 ```
-
-### 1.3 访问修饰符
-
-| 修饰符      | 说明     | 类内部 | 子类 | 外部 |
-| ----------- | -------- | ------ | ---- | ---- |
-| `public`    | 共有的   | ✅      | ✅    | ✅    |
-| `protected` | 受保护的 | ✅      | ✅    | ❌    |
-| `private`   | 私有的   | ✅      | ❌    | ❌    |
 
 ```php
 class demo {
-    public $name = "juran";      // 外部可访问
+    public $name = "NK7";      // 外部可访问
     protected $sex = "猛男";      // 外部不可访问
     private $age = 18;           // 外部不可访问
 }
@@ -47,27 +39,27 @@ class demo {
 
 ### 2.2 序列化后的格式
 
-| 类型   | 格式示例                                 |
-| ------ | ---------------------------------------- |
-| 空字符 | `N;`                                     |
-| 整型   | `i:123;`                                 |
-| 浮点型 | `d:123.3;`                               |
-| 布尔型 | `b:1;`                                   |
-| 字符串 | `s:5:"juran";`                           |
-| 数组   | `a:3:{i:0;s:5:"juran";i:1;s:2:"jr";}`    |
-| 对象   | `O:4:"demo":1:{s:4:"name";s:5:"juran";}` |
+| 类型   | 格式示例                               |
+| ------ | -------------------------------------- |
+| 空字符 | `N;`                                   |
+| 整型   | `i:123;`                               |
+| 浮点型 | `d:123.3;`                             |
+| 布尔型 | `b:1;`                                 |
+| 字符串 | `s:5:"NK7";`                           |
+| 数组   | `a:3:{i:0;s:5:"NK7";i:1;s:2:"NK7";}`   |
+| 对象   | `O:4:"demo":1:{s:4:"name";s:5:"NK7";}` |
 
 ### 2.3 序列化对象详解
 
 ```php
 class demo {
-    public $name = "juran";
+    public $name = "NK7";
     protected $age;
     private $sex;
 }
 
 // 序列化结果
-// O:4:"demo":3:{s:4:"name";s:5:"juran";s:6:"%00*%00age";N;s:9:"%00demo%00sex";N;}
+// O:4:"demo":3:{s:4:"name";s:5:"NK7";s:6:"%00*%00age";N;s:9:"%00demo%00sex";N;}
 ```
 
 **格式解析**：
@@ -94,12 +86,12 @@ class demo {
 ```php
 // 原类定义
 class demo {
-    public $name = "juran";
+    public $name = "NK7";
 }
 
 // 反序列化时可以修改属性值
-$d = unserialize('O:4:"demo":1:{s:4:"name";s:2:"jr";}');
-// 此时 $d->name = "jr"，而非 "juran"
+$d = unserialize('O:4:"demo":1:{s:4:"name";s:2:"NK7";}');
+// 此时 $d->name = "NK7"，而非 "NK7"
 ```
 
 ### 3.3 反序列化漏洞原因
@@ -270,10 +262,10 @@ if (preg_match('/[oc]:\d+:/i', $var)) {
 
 ```php
 // 原序列化
-O:4:"demo":1:{s:4:"name";s:5:"juran";}
+O:4:"demo":1:{s:4:"name";s:5:"NK7";}
 
 // 绕过（将属性个数改为大于实际值）
-O:4:"demo":2:{s:4:"name";s:5:"juran";}
+O:4:"demo":2:{s:4:"name";s:5:"NK7";}
 ```
 
 此时`__wakeup()`不会被调用。
