@@ -14,8 +14,10 @@ repository: "nk7667/nk7667.github.io"
 
 timezone: Asia/Shanghai
 
-# 文章 URL：按日期，避免 /categories/... 过长
+# 文章 URL（默认按日期，改动会改变已发布链接）
 permalink: /:year/:month/:day/:title/
+# 若要「分类嵌套」进地址，可改为（需同步调整站内链接）：
+# permalink: /:categories/:year/:month/:day/:title/
 
 words_per_minute: 200
 
@@ -59,6 +61,7 @@ exclude:
   - node_modules
   - vendor
   - README.md
+  - _posts/README.md
 
 # 作者侧栏
 author:
