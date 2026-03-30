@@ -225,36 +225,15 @@ html {
   padding: 0.35rem 0.65rem !important;
 }
 
-/* 系列：类目 → 各篇（与正文目录同一套中性风格） */
+/* 分类下文章列表：标题为分类名（与「本页目录」同款标题样式） */
 .sidebar--stacked .sidebar-series {
   flex: 0 0 auto;
   margin-top: 0.85rem;
 }
 
-.sidebar--stacked .series-nav__tree {
-  margin: 0 !important;
-  padding: 0.25rem 0 0 !important;
-  list-style: none !important;
-}
-
-.sidebar--stacked .series-nav__folder {
-  margin: 0 !important;
-  list-style: none !important;
-}
-
-.sidebar--stacked .series-nav__folder-label {
-  display: block;
-  font-size: 0.9375rem;
-  font-weight: 700;
-  color: #27272a;
-  padding: 0.35rem 0.25rem 0.45rem 0;
-  margin-bottom: 0.15rem;
-}
-
 .sidebar--stacked .series-nav__posts {
   margin: 0 !important;
-  padding: 0 0 0 0.85rem !important;
-  border-left: 0 !important;
+  padding: 0.35rem 0 0 !important;
   list-style: none !important;
 }
 
