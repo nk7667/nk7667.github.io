@@ -80,7 +80,7 @@ public class UnserializeTest {
 可以重写person类的readObject方法来验证:
 
 ```java
-package com.yuy0ung.fundamentals;
+package com.nk7.fundamentals;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
