@@ -1,0 +1,10 @@
+---
+# 覆盖远程主题的 main 入口：必须在最后 import custom（MM 默认不 import，站点定制从未进 main.css）
+search: false
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
+@import "minimal-mistakes";
+@import "minimal-mistakes/custom";

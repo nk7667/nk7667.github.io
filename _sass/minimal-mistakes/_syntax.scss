@@ -8,7 +8,7 @@ figure.highlight {
   position: relative;
   margin-bottom: 1em;
   background: #e8ecf1;
-  color: #24292f;
+  color: #24292f !important; /* 盖过 variables 里 $base05 等浅色 token 继承 */
   font-family: $monospace;
   font-size: $type-size-6;
   line-height: 1.8;
@@ -26,7 +26,7 @@ pre.highlight {
   position: relative;
   margin-bottom: 1em;
   background: #e8ecf1;
-  color: #24292f;
+  color: #24292f !important;
   font-family: $monospace;
   font-size: $type-size-6;
   line-height: 1.8;
