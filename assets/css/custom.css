@@ -1,3 +1,77 @@
+/* 顶栏：去掉汉堡菜单，内联导航 + 简洁排版 */
+.site-header--clean {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: linear-gradient(180deg, #fafbfc 0%, #f5f6f8 100%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+}
+
+.site-header--clean .site-title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #111;
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
+.site-header--clean .site-title:hover {
+  color: #1756a8;
+  text-decoration: none;
+}
+
+.site-header--clean .site-nav.site-nav--inline {
+  float: none;
+  position: static;
+  margin: 0;
+  clear: none;
+}
+
+.site-nav--inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  line-height: 1.4;
+}
+
+.site-nav--inline .page-link {
+  display: inline-block;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.site-nav--inline .page-link:hover {
+  border-color: rgba(23, 86, 168, 0.35);
+  color: #1756a8;
+  text-decoration: none;
+  background: rgba(23, 86, 168, 0.06);
+}
+
+/* 覆盖 Minima 原导航的浮动与汉堡相关规则 */
+.site-header--clean .site-nav .nav-trigger,
+.site-header--clean .site-nav label[for="nav-trigger"] {
+  display: none !important;
+}
+
+.site-header--clean .site-nav .menu-icon {
+  display: none !important;
+}
+
 /* 首页：主内容 + 侧边栏 */
 .page-with-sidebar {
   display: flex;
