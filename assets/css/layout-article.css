@@ -1,4 +1,13 @@
 /**
+ * 代码块浅色底兜底（主题 _syntax.scss 曾为深色 $base00）
+ */
+.page__content div.highlighter-rouge,
+.page__content figure.highlight {
+  background: #f6f8fa !important;
+  color: #24292f !important;
+}
+
+/**
  * 文章主栏加宽（与 _sass/minimal-mistakes/_page.scss 一致，纯 CSS 兜底）
  * MM 默认 .page 有与侧栏等宽的 padding-right，未用右侧栏时右侧空白过大
  */
