@@ -1,2 +1,12 @@
 /* 在 Minimal Mistakes 主题之上追加样式（会与主题 Sass 合并） */
 /* 文档：https://mmistakes.github.io/minimal-mistakes/docs/stylesheets/ */
+
+/* 正文标题旁的锚点链接（文案常为 “Permalink”）：不显示 */
+.page__content h1 .header-link,
+.page__content h2 .header-link,
+.page__content h3 .header-link,
+.page__content h4 .header-link,
+.page__content h5 .header-link,
+.page__content h6 .header-link {
+  display: none !important;
+}

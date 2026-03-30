@@ -63,7 +63,7 @@ exclude:
 # 作者侧栏
 author:
   name: nk7
-  bio: "Web / 安全 / 工程化 · 学习笔记与项目记录"
+  bio: "Web / 安全"
   location: "China"
   links:
     - label: GitHub
@@ -83,7 +83,8 @@ defaults:
     values:
       layout: single
       author_profile: true
-      read_time: true
+      show_date: true
+      read_time: false
       comments: false
       share: true
       related: true
