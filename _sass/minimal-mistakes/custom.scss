@@ -181,6 +181,31 @@ $page__code-fg: #24292f;
   letter-spacing: 0 !important;
 }
 
+/* -------------------------------------------------------------------------
+   正文区域加宽：MM 默认 .page 在左侧侧栏外又预留了「右侧栏」等宽的 padding-right，
+   未使用右侧 TOC 时右侧会空一大块 — 改为与 #main 边距一致
+   ------------------------------------------------------------------------- */
+@include breakpoint($large) {
+  #main .page {
+    padding-right: 1em !important;
+  }
+
+  #main .page__related {
+    padding-right: 0 !important;
+  }
+}
+
+@include breakpoint($x-large) {
+  #main .page {
+    padding-right: 1.5em !important;
+  }
+
+  /* 略放宽整页最大宽度（主题默认约 1280px） */
+  #main {
+    max-width: 90rem !important;
+  }
+}
+
 /* ------------------------------------------------------------------------- */
 html {
   scroll-behavior: smooth;
