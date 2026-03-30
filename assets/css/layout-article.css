@@ -1,0 +1,23 @@
+/**
+ * 文章主栏加宽（与 _sass/minimal-mistakes/_page.scss 一致，纯 CSS 兜底）
+ * MM 默认 .page 有与侧栏等宽的 padding-right，未用右侧栏时右侧空白过大
+ */
+@media (min-width: 1024px) {
+  #main > article.page,
+  #main article.page,
+  #main .page {
+    padding-right: 1em !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  #main > article.page,
+  #main article.page,
+  #main .page {
+    padding-right: 1.5em !important;
+  }
+
+  #main {
+    max-width: 90rem !important;
+  }
+}
