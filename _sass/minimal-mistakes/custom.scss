@@ -13,7 +13,7 @@
 }
 
 /* -------------------------------------------------------------------------
-   代码块：浅色面板 + IBM Plex Mono（Rouge 令牌着色适配浅底）
+   代码块：仅浅色底（不用深色）；IBM Plex Mono + Rouge 语法色（浅底配色）
    ------------------------------------------------------------------------- */
 $page__code-font: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 $page__code-bg: #f6f8fa;
@@ -73,7 +73,7 @@ $page__code-fg: #24292f;
   border: 0 !important;
   font-family: inherit !important;
   font-size: inherit !important;
-  color: inherit !important;
+  /* 勿对 code 设 color/inherit，否则子 span 的 Rouge 着色易被压成单色 */
 }
 
 .page__content > pre,
