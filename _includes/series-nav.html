@@ -3,7 +3,11 @@
 {% endcomment %}
 {% if page.categories and page.categories.size > 0 %}
   {% assign cat_key = page.categories[0] %}
-  {% assign posts_in_cat = site.categories[cat_key] %}
+  {%- comment -%}
+    不依赖 site.categories[cat_key]（在某些构建/编码场景下可能缺条目），
+    直接从 site.posts 按 categories 过滤，确保系列列表稳定可见。
+  {%- endcomment -%}
+  {% assign posts_in_cat = site.posts | where_exp: "p", "p.categories contains cat_key" %}
   {% if posts_in_cat and posts_in_cat.size > 1 %}
     {% assign series_posts = posts_in_cat | sort: 'series_order' %}
     <div class="sidebar-series">
