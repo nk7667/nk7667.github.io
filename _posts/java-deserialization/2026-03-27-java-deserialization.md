@@ -659,9 +659,9 @@ flowchart TD
 }
 ```
 
-## 修复：升级到 Fastjson 2.x
+### 修复：升级到 Fastjson 2.x
 
-### Fastjson 2.x 的安全机制重构
+#### Fastjson 2.x 的安全机制重构
 Fastjson 2.x 重构了安全机制，不再有 AutoType 风险。
 
 #### 无法升级时的临时方案
