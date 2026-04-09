@@ -9,7 +9,9 @@
   {%- endcomment -%}
   {% assign posts_in_cat = site.posts | where_exp: "p", "p.categories contains cat_key" %}
   {% if posts_in_cat and posts_in_cat.size > 1 %}
-    {% assign series_posts = posts_in_cat | sort: 'series_order' %}
+    {% assign posts_with_order = posts_in_cat | where_exp: "p", "p.series_order != nil" | sort: 'series_order' %}
+    {% assign posts_without_order = posts_in_cat | where_exp: "p", "p.series_order == nil" | sort: 'date' | reverse %}
+    {% assign series_posts = posts_with_order | concat: posts_without_order %}
     <div class="sidebar-series">
       <nav class="toc toc--sidebar toc--doc toc--series" aria-label="{{ cat_key }}">
         <header class="toc--doc__head">
@@ -20,7 +22,7 @@
         <ul class="series-nav__posts">
           {% for sp in series_posts %}
             <li class="series-nav__post{% if sp.url == page.url %} active{% endif %}">
-              <a href="{{ sp.url | relative_url }}">{{ sp.title }}</a>
+              <a href="{{ sp.url | relative_url }}"{% if sp.url == page.url %} aria-current="page"{% endif %}>{{ sp.title }}</a>
             </li>
           {% endfor %}
         </ul>

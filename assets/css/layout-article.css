@@ -1,20 +1,3 @@
-/**
- * 代码块：深色底（与 _syntax.scss Base16 $base00 一致）
- * 勿在此写 color，避免 !important 盖住 token 着色
- */
-.page__content div.highlighter-rouge,
-.page__content figure.highlight,
-.page__content pre.highlight,
-#main article.page .page__content div.highlighter-rouge,
-#main article.page .page__content figure.highlight,
-#main article.page .page__content pre.highlight {
-  background: #263238 !important;
-  border: 1px solid #546e7a !important;
-}
-
-/**
- * 文章主栏加宽（与 _sass/minimal-mistakes/_page.scss 一致，纯 CSS 兜底）
- */
 @media (min-width: 1024px) {
   #main > article.page,
   #main article.page,

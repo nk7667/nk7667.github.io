@@ -33,6 +33,72 @@ $page__code-fg: $base05;
   overflow: hidden !important;
 }
 
+.page__content div.highlighter-rouge.code-with-copy,
+.page__content figure.highlight.code-with-copy,
+.page__content .highlight.code-with-copy,
+.page__content pre.highlight.code-with-copy,
+#main article.page .page__content div.highlighter-rouge.code-with-copy,
+#main article.page .page__content figure.highlight.code-with-copy,
+#main article.page .page__content .highlight.code-with-copy,
+#main article.page .page__content pre.highlight.code-with-copy {
+  position: relative !important;
+}
+
+.page__content .code-with-copy pre,
+#main article.page .page__content .code-with-copy pre {
+  padding-top: 2.65rem !important;
+}
+
+.page__content .code-copy-btn,
+#main article.page .page__content .code-copy-btn {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  z-index: 2;
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  user-select: none;
+  opacity: 0.85;
+  transition: opacity 0.12s ease, transform 0.12s ease, background 0.12s ease;
+}
+
+.page__content .code-copy-btn:hover,
+#main article.page .page__content .code-copy-btn:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.page__content .code-copy-btn:active,
+#main article.page .page__content .code-copy-btn:active {
+  transform: translateY(1px);
+}
+
+.page__content .code-copy-btn:focus-visible,
+#main article.page .page__content .code-copy-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 2px;
+}
+
+.page__content .code-copy-btn[data-state="copied"],
+#main article.page .page__content .code-copy-btn[data-state="copied"] {
+  background: rgba(34, 197, 94, 0.25);
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+.page__content .code-copy-btn[data-state="failed"],
+#main article.page .page__content .code-copy-btn[data-state="failed"] {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
 .page__content div.highlighter-rouge .highlight,
 #main article.page .page__content div.highlighter-rouge .highlight {
   margin: 0 !important;
@@ -103,6 +169,30 @@ $page__code-fg: $base05;
   -moz-tab-size: 4;
   overflow-x: auto !important;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+}
+
+.page__content .highlight pre::-webkit-scrollbar,
+.page__content div.highlighter-rouge pre::-webkit-scrollbar,
+#main article.page .page__content .highlight pre::-webkit-scrollbar,
+#main article.page .page__content div.highlighter-rouge pre::-webkit-scrollbar {
+  height: 10px;
+}
+
+.page__content .highlight pre::-webkit-scrollbar-thumb,
+.page__content div.highlighter-rouge pre::-webkit-scrollbar-thumb,
+#main article.page .page__content .highlight pre::-webkit-scrollbar-thumb,
+#main article.page .page__content div.highlighter-rouge pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+}
+
+.page__content .highlight pre::-webkit-scrollbar-thumb:hover,
+.page__content div.highlighter-rouge pre::-webkit-scrollbar-thumb:hover,
+#main article.page .page__content .highlight pre::-webkit-scrollbar-thumb:hover,
+#main article.page .page__content div.highlighter-rouge pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .page__content .highlight pre code,
@@ -118,9 +208,13 @@ $page__code-fg: $base05;
 }
 
 .page__content > pre,
+.page__content .code-block > pre,
 .page__content blockquote pre,
+.page__content blockquote .code-block > pre,
 #main article.page .page__content > pre,
-#main article.page .page__content blockquote pre {
+#main article.page .page__content .code-block > pre,
+#main article.page .page__content blockquote pre,
+#main article.page .page__content blockquote .code-block > pre {
   border-radius: 8px !important;
   border: 1px solid $page__code-border !important;
   background: $page__code-bg !important;
@@ -165,7 +259,65 @@ html {
   h2,
   h3,
   h4 {
-    scroll-margin-top: 1.25rem;
+    scroll-margin-top: 3.25rem;
+  }
+
+  a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid #e4e4e7;
+    background: #fff;
+  }
+
+  figure {
+    margin: 1.25rem 0;
+  }
+
+  figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: #71717a;
+  }
+
+  blockquote {
+    margin: 1.25rem 0;
+    padding: 0.9rem 1rem;
+    border-left: 4px solid #d4d4d8;
+    border-radius: 10px;
+    background: #fafafa;
+  }
+
+  hr {
+    margin: 2rem 0;
+    border: 0;
+    border-top: 1px solid #e4e4e7;
+  }
+
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  th,
+  td {
+    border: 1px solid #e4e4e7;
+    padding: 0.55rem 0.65rem;
+    vertical-align: top;
   }
 
   /* 段落级正文略小一号（标题、代码块不受影响） */
@@ -303,6 +455,7 @@ html {
   flex: 1 1 auto;
   font-size: 1.0625rem !important;
   line-height: 1.55 !important;
+  overscroll-behavior: contain;
   scrollbar-width: thin;
   scrollbar-color: #d4d4d8 transparent;
 }
