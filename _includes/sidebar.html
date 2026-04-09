@@ -8,7 +8,11 @@
 
     {% if page.toc %}
       <div class="sidebar-toc">
-        <nav class="toc toc--sidebar toc--doc" aria-label="{{ page.toc_label | default: '本页目录' }}">
+        {% assign toc_title = page.toc_label | default: '本页目录' %}
+        <nav class="toc toc--sidebar toc--doc" aria-label="{{ toc_title }}">
+          <header class="toc--doc__head">
+            <p class="toc--doc__title"><span class="toc--doc__title-text">{{ toc_title }}</span></p>
+          </header>
           {% include toc.html sanitize=true html=content h_min=2 h_max=4 class="toc__menu" skip_no_ids=true %}
         </nav>
       </div>

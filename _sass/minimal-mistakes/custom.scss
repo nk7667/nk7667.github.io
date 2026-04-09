@@ -460,6 +460,10 @@ html {
   scrollbar-color: #d4d4d8 transparent;
 }
 
+.sidebar--stacked .toc--doc .toc__menu {
+  scroll-behavior: smooth;
+}
+
 .sidebar--stacked .toc--doc .toc__menu::-webkit-scrollbar {
   width: 5px;
 }
