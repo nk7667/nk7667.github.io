@@ -34,7 +34,7 @@
           {% assign dir2_list = dir2_raw | split: '|||' | where_exp: 'i', 'i != ""' | uniq | sort %}
 
           <li class="kb-nav__item">
-            <details class="kb-nav__details"{% if current_path contains '_posts/' %}{% if dir1 == current_dir1 %} open{% endif %}{% endif %}>
+            <details class="kb-nav__details" open>
               <summary class="kb-nav__summary"><strong>{{ dir1_label }}</strong></summary>
               <div class="kb-nav__content">
                 {% capture posts1_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size == 2 and parts[0] == dir1 %}{{ p.url | relative_url }}:::{{ p.title }}|||{% endif %}{% endfor %}{% endcapture %}
@@ -66,7 +66,7 @@
 
                       {% if dir3_list.size > 0 or posts2_list.size > 0 %}
                         <li class="kb-nav__sub-item">
-                          <details class="kb-nav__details kb-nav__details--sub"{% if current_path contains '_posts/' %}{% if dir1 == current_dir1 and dir2 == current_dir2 %} open{% endif %}{% endif %}>
+                          <details class="kb-nav__details kb-nav__details--sub" open>
                             <summary class="kb-nav__summary kb-nav__summary--sub">{{ dir2_label }}</summary>
                             <ul class="kb-nav__sub2">
                               {% for item in posts2_list %}
