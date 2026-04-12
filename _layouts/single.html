@@ -23,7 +23,12 @@ layout: default
   {% assign has_sidebar = true %}
 {% endif %}
 
-<div id="main" role="main"{% if has_sidebar %} class="layout-3col"{% endif %}>
+{% assign has_right_sidebar = false %}
+{% if page.toc %}
+  {% assign has_right_sidebar = true %}
+{% endif %}
+
+<div id="main" role="main"{% if has_sidebar %} class="layout-3col {% if has_right_sidebar %}layout-3col--3col{% else %}layout-3col--2col{% endif %}"{% endif %}>
   {% if has_sidebar %}
     <div class="layout-3col__left">
       {% if page.author_profile or layout.author_profile %}

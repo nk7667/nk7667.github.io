@@ -5,7 +5,8 @@ layout: single
 author_profile: false
 toc: false
 hide_title: true
-classes: wide kb-home
+classes: wide
+sidebar: []
 ---
 
 {% include site-directory.html %}
