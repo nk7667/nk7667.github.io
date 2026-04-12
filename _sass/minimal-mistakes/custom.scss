@@ -583,6 +583,12 @@ html {
   backdrop-filter: blur(12px);
 }
 
+.layout--single #main {
+  @include breakpoint($x-large) {
+    max-width: 110rem;
+  }
+}
+
 @include breakpoint($large) {
   .layout--single .masthead {
     z-index: 1000;
