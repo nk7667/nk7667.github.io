@@ -438,7 +438,7 @@ html {
   color: #18181b !important;
   background: transparent !important;
   border: 0 !important;
-  border-bottom: 1px solid #d4d4d8 !important;
+  border-bottom: 0 !important;
   border-radius: 0 !important;
 }
 
@@ -502,8 +502,11 @@ html {
   font-weight: 500 !important;
   font-size: 0.8rem !important;
   text-decoration: none !important;
-  word-break: break-word !important;
-  overflow-wrap: anywhere !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
   transition: background 0.12s ease, color 0.12s ease;
 }
 
@@ -928,6 +931,10 @@ body {
     padding-right: 0;
   }
 
+.kb-directory {
+  max-width: none;
+}
+
 
   .layout-3col__right {
     position: sticky;
@@ -977,7 +984,7 @@ body {
   color: #18181b !important;
   background: transparent !important;
   border: 0 !important;
-  border-bottom: 1px solid #e4e4e7 !important;
+  border-bottom: 0 !important;
   border-radius: 0 !important;
 }
 
@@ -995,6 +1002,9 @@ body {
   color: #3f3f46 !important;
   font-size: 0.825rem !important;
   font-weight: 550 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 .layout-3col__right .toc--doc .toc__menu > li > a {
@@ -1035,6 +1045,12 @@ body {
 }
 
 .sidebar.sticky.sidebar--stacked {
+  box-shadow: none !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.sidebar.sticky.sidebar--stacked {
   z-index: 9999;
 }
 
@@ -1056,12 +1072,15 @@ body {
   cursor: pointer;
   font-weight: 700;
   color: #18181b;
-  font-size: 0.925rem;
+  font-size: 0.875rem;
   padding: 0.25rem 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .kb-nav__summary--sub {
-  font-size: 0.855rem;
+  font-size: 0.875rem;
   font-weight: 700;
 }
 
@@ -1099,7 +1118,7 @@ body {
   list-style: none;
   margin: 0.2rem 0 0.25rem;
   padding: 0 0 0 0.45rem;
-  border-left: 2px solid rgba(228, 228, 231, 0.9);
+  border-left: 0;
 }
 
 .kb-nav__sub-item a {
@@ -1109,6 +1128,9 @@ body {
   text-decoration: none;
   color: #3f3f46;
   font-size: 0.825rem !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .kb-nav__sub-item a:hover {
@@ -1121,8 +1143,11 @@ body {
   border-radius: 8px;
   text-decoration: none;
   color: #52525b;
-  font-size: 0.775rem !important;
+  font-size: 0.825rem !important;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .kb-nav__sub2-item a:hover {
@@ -1135,7 +1160,10 @@ body {
 
 
 .kb-nav__item a {
-  font-size: 1rem !important;
+  font-size: 0.875rem !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .kb-nav__more a {
