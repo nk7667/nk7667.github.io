@@ -331,6 +331,7 @@ html {
 /* -------------------------------------------------------------------------
    侧栏：作者简介 + 文档式目录（无灰盒子、无 Font Awesome 标题栏）
    ------------------------------------------------------------------------- */
+.layout--single {
 .sidebar--stacked {
   @include breakpoint($large) {
     display: flex;
@@ -568,6 +569,8 @@ html {
 .sidebar.sidebar--stacked nav.toc.toc--series .series-nav__posts a:link,
 .sidebar.sidebar--stacked nav.toc.toc--series .series-nav__posts a:visited {
   color: #3f3f46 !important;
+}
+
 }
 
 .masthead {
