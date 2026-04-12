@@ -1,0 +1,6 @@
+root: 其他
+java-deserialization: Java 反序列化
+java-base: Java 安全基础
+ssti: SSTI
+javassti: Java SSTI
+pythonssti: Python SSTI

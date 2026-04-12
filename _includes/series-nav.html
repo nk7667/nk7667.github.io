@@ -1,0 +1,32 @@
+{% comment %}
+  同分类文章列表：标题为分类名（上一级类目），下列各篇（series_order 排序）
+{% endcomment %}
+{% if page.categories and page.categories.size > 0 %}
+  {% assign cat_key = page.categories[0] %}
+  {%- comment -%}
+    不依赖 site.categories[cat_key]（在某些构建/编码场景下可能缺条目），
+    直接从 site.posts 按 categories 过滤，确保系列列表稳定可见。
+  {%- endcomment -%}
+  {% assign posts_in_cat = site.posts | where_exp: "p", "p.categories contains cat_key" %}
+  {% if posts_in_cat and posts_in_cat.size > 1 %}
+    {% assign posts_with_order = posts_in_cat | where_exp: "p", "p.series_order != nil" | sort: 'series_order' %}
+    {% assign posts_without_order = posts_in_cat | where_exp: "p", "p.series_order == nil" | sort: 'date' | reverse %}
+    {% assign series_posts = posts_with_order | concat: posts_without_order %}
+    <div class="sidebar-series">
+      <nav class="toc toc--sidebar toc--doc toc--series" aria-label="{{ cat_key }}">
+        <header class="toc--doc__head">
+          <h4 class="nav__title toc--doc__title">
+            <span class="toc--doc__title-text">{{ cat_key }}</span>
+          </h4>
+        </header>
+        <ul class="series-nav__posts">
+          {% for sp in series_posts %}
+            <li class="series-nav__post{% if sp.url == page.url %} active{% endif %}">
+              <a href="{{ sp.url | relative_url }}"{% if sp.url == page.url %} aria-current="page"{% endif %}>{{ sp.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+  {% endif %}
+{% endif %}

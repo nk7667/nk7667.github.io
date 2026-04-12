@@ -1,0 +1,104 @@
+{% assign titles = site.data.directory_titles %}
+{% assign posts_sorted = site.posts | sort: 'date' | reverse %}
+
+{% assign current_path = page.path | default: '' %}
+{% assign current_url = page.url | relative_url %}
+{% assign current_dir1 = '' %}
+{% assign current_dir2 = '' %}
+
+{% if current_path contains '_posts/' %}
+  {% assign current_rel = current_path | remove_first: '_posts/' %}
+  {% assign current_parts = current_rel | split: '/' %}
+  {% if current_parts.size > 1 %}
+    {% assign current_dir1 = current_parts[0] %}
+  {% else %}
+    {% assign current_dir1 = 'root' %}
+  {% endif %}
+  {% if current_parts.size > 2 %}
+    {% assign current_dir2 = current_parts[1] %}
+  {% endif %}
+{% endif %}
+
+{% capture dir1_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size > 1 %}{{ parts[0] }}|||{% else %}root|||{% endif %}{% endfor %}{% endcapture %}
+{% assign dir1_list = dir1_raw | split: '|||' | where_exp: 'i', 'i != ""' | uniq | sort %}
+
+<div class="sidebar-site-dir">
+  <nav class="toc toc--sidebar toc--doc" aria-label="站点目录">
+    <h3 class="kb-tree__heading">文档</h3>
+    <div class="kb-nav">
+      <ul class="toc__menu kb-nav__menu">
+        {% for dir1 in dir1_list limit: 20 %}
+          {% assign dir1_label = titles[dir1] | default: dir1 %}
+
+          {% capture dir2_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size > 2 %}{% if parts[0] == dir1 %}{{ parts[1] }}|||{% endif %}{% endif %}{% endfor %}{% endcapture %}
+          {% assign dir2_list = dir2_raw | split: '|||' | where_exp: 'i', 'i != ""' | uniq | sort %}
+
+          <li class="kb-nav__item">
+            <details class="kb-nav__details"{% if current_path contains '_posts/' %}{% if dir1 == current_dir1 %} open{% endif %}{% endif %}>
+              <summary class="kb-nav__summary"><strong>{{ dir1_label }}</strong></summary>
+              <div class="kb-nav__content">
+                {% capture posts1_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size == 2 and parts[0] == dir1 %}{{ p.url | relative_url }}:::{{ p.title }}|||{% endif %}{% endfor %}{% endcapture %}
+                {% assign posts1_list = posts1_raw | split: '|||' | where_exp: 'i', 'i != ""' %}
+
+                {% if posts1_list.size > 0 %}
+                  <ul class="kb-nav__sub">
+                    {% for item in posts1_list %}
+                      {% assign parts1 = item | split: ':::' %}
+                      {% assign post_url = parts1[0] %}
+                      {% assign post_title = parts1[1] %}
+                      <li class="kb-nav__sub-item">
+                        <a class="kb-tree__link{% if post_url == current_url %} is-active{% endif %}" href="{{ post_url }}">{{ post_title }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+
+                {% if dir2_list.size > 0 %}
+                  <ul class="kb-nav__sub">
+                    {% for dir2 in dir2_list %}
+                      {% assign dir2_label = titles[dir2] | default: dir2 %}
+
+                      {% capture posts2_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size == 3 and parts[0] == dir1 and parts[1] == dir2 %}{{ p.url | relative_url }}:::{{ p.title }}|||{% endif %}{% endfor %}{% endcapture %}
+                      {% assign posts2_list = posts2_raw | split: '|||' | where_exp: 'i', 'i != ""' %}
+
+                      {% capture dir3_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size > 3 %}{% if parts[0] == dir1 and parts[1] == dir2 %}{{ parts[2] }}|||{% endif %}{% endif %}{% endfor %}{% endcapture %}
+                      {% assign dir3_list = dir3_raw | split: '|||' | where_exp: 'i', 'i != ""' | uniq | sort %}
+
+                      {% if dir3_list.size > 0 or posts2_list.size > 0 %}
+                        <li class="kb-nav__sub-item">
+                          <details class="kb-nav__details kb-nav__details--sub"{% if current_path contains '_posts/' %}{% if dir1 == current_dir1 and dir2 == current_dir2 %} open{% endif %}{% endif %}>
+                            <summary class="kb-nav__summary kb-nav__summary--sub">{{ dir2_label }}</summary>
+                            <ul class="kb-nav__sub2">
+                              {% for item in posts2_list %}
+                                {% assign parts2 = item | split: ':::' %}
+                                {% assign post_url = parts2[0] %}
+                                {% assign post_title = parts2[1] %}
+                                <li class="kb-nav__sub2-item">
+                                  <a class="kb-tree__link{% if post_url == current_url %} is-active{% endif %}" href="{{ post_url }}">{{ post_title }}</a>
+                                </li>
+                              {% endfor %}
+                              {% for dir3 in dir3_list %}
+                                {% assign dir3_label = titles[dir3] | default: dir3 %}
+                                <li class="kb-nav__sub2-item">
+                                  <a class="kb-tree__link" href="{{ '/kb/' | relative_url }}#dir-{{ dir1 | slugify }}-{{ dir2 | slugify }}-{{ dir3 | slugify }}">{{ dir3_label }}</a>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </details>
+                        </li>
+                      {% else %}
+                        <li class="kb-nav__sub-item">
+                          <a class="kb-tree__link" href="{{ '/kb/' | relative_url }}#dir-{{ dir1 | slugify }}-{{ dir2 | slugify }}">{{ dir2_label }}</a>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </details>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </nav>
+</div>

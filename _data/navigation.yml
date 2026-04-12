@@ -1,0 +1,10 @@
+# 主导航 — https://mmistakes.github.io/minimal-mistakes/docs/navigation/
+main:
+  - title: "首页"
+    url: /
+  - title: "目录"
+    url: /kb/
+  - title: "GitHub"
+    url: https://github.com/nk7667
+  - title: "关于"
+    url: /about/

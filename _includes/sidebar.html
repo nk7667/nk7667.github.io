@@ -1,0 +1,36 @@
+{% if page.author_profile or layout.author_profile or page.sidebar or page.toc %}
+  <div class="sidebar sticky sidebar--stacked">
+    {% if page.author_profile or layout.author_profile %}
+      {% include author-profile.html %}
+    {% endif %}
+
+    {% include site-directory-sidebar.html %}
+
+    {% if page.toc %}
+      <div class="sidebar-toc">
+        {% assign toc_title = page.toc_label | default: '本页目录' %}
+        <nav class="toc toc--sidebar toc--doc" aria-label="{{ toc_title }}">
+          <header class="toc--doc__head">
+            <p class="toc--doc__title"><span class="toc--doc__title-text">{{ toc_title }}</span></p>
+          </header>
+          {% include toc.html sanitize=true html=content h_min=2 h_max=4 class="toc__menu" skip_no_ids=true %}
+        </nav>
+      </div>
+    {% endif %}
+
+    {% if page.sidebar %}
+      {% for s in page.sidebar %}
+        {% if s.image %}
+          <img src="{{ s.image | relative_url }}"
+               alt="{% if s.image_alt %}{{ s.image_alt }}{% endif %}">
+        {% endif %}
+        {% if s.title %}<h3>{{ s.title }}</h3>{% endif %}
+        {% if s.text %}{{ s.text | markdownify }}{% endif %}
+        {% if s.nav %}{% include nav_list nav=s.nav %}{% endif %}
+      {% endfor %}
+      {% if page.sidebar.nav %}
+        {% include nav_list nav=page.sidebar.nav %}
+      {% endif %}
+    {% endif %}
+  </div>
+{% endif %}

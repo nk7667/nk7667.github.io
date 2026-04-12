@@ -1,0 +1,19 @@
+@media (min-width: 1024px) {
+  #main > article.page,
+  #main article.page,
+  #main .page {
+    padding-right: 1em !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  #main > article.page,
+  #main article.page,
+  #main .page {
+    padding-right: 1.5em !important;
+  }
+
+  #main {
+    max-width: 90rem !important;
+  }
+}

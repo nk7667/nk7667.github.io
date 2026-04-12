@@ -1,0 +1,14 @@
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+
+# Trae IDE 文档与临时产物
+.trae/
+
+# 本地临时目录
+sstilabs-tmp/
+
+# 本地对照用，不参与 Sass 编译（与 _syntax.scss 二选一）
+_sass/minimal-mistakes/_syntax_ref.scss

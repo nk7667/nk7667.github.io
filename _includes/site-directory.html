@@ -1,0 +1,177 @@
+{% assign titles = site.data.directory_titles %}
+{% assign posts_sorted = site.posts | sort: 'date' | reverse %}
+
+{% capture dir1_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size > 1 %}{{ parts[0] }}|||{% else %}root|||{% endif %}{% endfor %}{% endcapture %}
+{% assign dir1_list = dir1_raw | split: '|||' | where_exp: 'i', 'i != ""' | uniq | sort %}
+
+<div class="kb-index">
+  <aside class="kb-index__sidebar">
+    <div class="kb-index__sidebar-inner">
+      <h3 class="kb-tree__heading">文档</h3>
+      <ul class="kb-tree__list">
+        {% for dir1 in dir1_list %}
+          {% assign dir1_label = titles[dir1] | default: dir1 %}
+          {% capture posts1_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size == 1 %}{% if dir1 == 'root' %}{{ p.url | relative_url }}:::{{ p.title }}:::{{ p.date | date: '%Y-%m-%d' }}|||{% endif %}{% endif %}{% if parts.size == 2 and parts[0] == dir1 %}{{ p.url | relative_url }}:::{{ p.title }}:::{{ p.date | date: '%Y-%m-%d' }}|||{% endif %}{% endfor %}{% endcapture %}
+          {% assign posts1_list = posts1_raw | split: '|||' | where_exp: 'i', 'i != ""' %}
+
+          {% capture dir2_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size > 2 %}{% if parts[0] == dir1 %}{{ parts[1] }}|||{% endif %}{% endif %}{% endfor %}{% endcapture %}
+          {% assign dir2_list = dir2_raw | split: '|||' | where_exp: 'i', 'i != ""' | uniq | sort %}
+
+          <li class="kb-tree__node">
+            <details class="kb-tree__details">
+              <summary class="kb-tree__summary"><strong>{{ dir1_label }}</strong></summary>
+              <div class="kb-tree__children">
+                {% if posts1_list.size > 0 %}
+                  <ul class="kb-tree__posts">
+                    {% for item in posts1_list %}
+                      {% assign p1 = item | split: ':::' %}
+                      <li class="kb-tree__post">
+                        <a class="kb-tree__link" href="{{ p1[0] }}">{{ p1[1] }}</a>
+                        <span class="kb-tree__date">{{ p1[2] }}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+
+                {% if dir2_list.size > 0 %}
+                  <ul class="kb-tree__list kb-tree__list--sub">
+                    {% for dir2 in dir2_list %}
+                      {% assign dir2_label = titles[dir2] | default: dir2 %}
+                      {% capture posts2_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size == 3 and parts[0] == dir1 and parts[1] == dir2 %}{{ p.url | relative_url }}:::{{ p.title }}:::{{ p.date | date: '%Y-%m-%d' }}|||{% endif %}{% endfor %}{% endcapture %}
+                      {% assign posts2_list = posts2_raw | split: '|||' | where_exp: 'i', 'i != ""' %}
+
+                      {% capture dir3_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size > 3 %}{% if parts[0] == dir1 and parts[1] == dir2 %}{{ parts[2] }}|||{% endif %}{% endif %}{% endfor %}{% endcapture %}
+                      {% assign dir3_list = dir3_raw | split: '|||' | where_exp: 'i', 'i != ""' | uniq | sort %}
+
+                      <li class="kb-tree__node">
+                        <details class="kb-tree__details kb-tree__details--sub">
+                          <summary class="kb-tree__summary kb-tree__summary--sub">{{ dir2_label }}</summary>
+                          <div class="kb-tree__children">
+                            {% if posts2_list.size > 0 %}
+                              <ul class="kb-tree__posts">
+                                {% for item in posts2_list %}
+                                  {% assign p2 = item | split: ':::' %}
+                                  <li class="kb-tree__post">
+                                    <a class="kb-tree__link" href="{{ p2[0] }}">{{ p2[1] }}</a>
+                                    <span class="kb-tree__date">{{ p2[2] }}</span>
+                                  </li>
+                                {% endfor %}
+                              </ul>
+                            {% endif %}
+
+                            {% if dir3_list.size > 0 %}
+                              <ul class="kb-tree__list kb-tree__list--sub2">
+                                {% for dir3 in dir3_list %}
+                                  {% assign dir3_label = titles[dir3] | default: dir3 %}
+                                  <li class="kb-tree__node">
+                                    <details class="kb-tree__details kb-tree__details--sub2">
+                                      <summary class="kb-tree__summary kb-tree__summary--sub2">{{ dir3_label }}</summary>
+                                      <div class="kb-tree__children">
+                                        <ul class="kb-tree__posts">
+                                          {% for p in posts_sorted %}
+                                            {% assign rel = p.path | remove_first: '_posts/' %}
+                                            {% assign parts = rel | split: '/' %}
+                                            {% if parts.size > 3 and parts[0] == dir1 and parts[1] == dir2 and parts[2] == dir3 %}
+                                              <li class="kb-tree__post">
+                                                <a class="kb-tree__link" href="{{ p.url | relative_url }}">{{ p.title }}</a>
+                                                <span class="kb-tree__date">{{ p.date | date: '%Y-%m-%d' }}</span>
+                                              </li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    </details>
+                                  </li>
+                                {% endfor %}
+                              </ul>
+                            {% endif %}
+                          </div>
+                        </details>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </details>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </aside>
+
+  <div class="kb-index__content">
+    {% for dir1 in dir1_list %}
+      {% assign dir1_label = titles[dir1] | default: dir1 %}
+      <section class="kb-flat" id="dir-{{ dir1 | slugify }}">
+        <h2 class="kb-flat__h2">{{ dir1_label }}</h2>
+
+        <ul class="kb-flat__list">
+          {% for p in posts_sorted %}
+            {% assign rel = p.path | remove_first: '_posts/' %}
+            {% assign parts = rel | split: '/' %}
+            {% if dir1 == 'root' %}
+              {% if parts.size == 1 %}
+                <li class="kb-flat__item">
+                  <a class="kb-flat__link" href="{{ p.url | relative_url }}">{{ p.title }}</a>
+                  <span class="kb-flat__date">{{ p.date | date: '%Y-%m-%d' }}</span>
+                </li>
+              {% endif %}
+            {% else %}
+              {% if parts.size == 2 and parts[0] == dir1 %}
+                <li class="kb-flat__item">
+                  <a class="kb-flat__link" href="{{ p.url | relative_url }}">{{ p.title }}</a>
+                  <span class="kb-flat__date">{{ p.date | date: '%Y-%m-%d' }}</span>
+                </li>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+
+        {% capture dir2_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size > 2 %}{% if parts[0] == dir1 %}{{ parts[1] }}|||{% endif %}{% endif %}{% endfor %}{% endcapture %}
+        {% assign dir2_list = dir2_raw | split: '|||' | where_exp: 'i', 'i != ""' | uniq | sort %}
+
+        {% if dir2_list.size > 0 %}
+          {% for dir2 in dir2_list %}
+            {% assign dir2_label = titles[dir2] | default: dir2 %}
+            <h3 class="kb-flat__h3" id="dir-{{ dir1 | slugify }}-{{ dir2 | slugify }}">{{ dir2_label }}</h3>
+
+            <ul class="kb-flat__list">
+              {% for p in posts_sorted %}
+                {% assign rel = p.path | remove_first: '_posts/' %}
+                {% assign parts = rel | split: '/' %}
+                {% if parts.size == 3 and parts[0] == dir1 and parts[1] == dir2 %}
+                  <li class="kb-flat__item">
+                    <a class="kb-flat__link" href="{{ p.url | relative_url }}">{{ p.title }}</a>
+                    <span class="kb-flat__date">{{ p.date | date: '%Y-%m-%d' }}</span>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+
+            {% capture dir3_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size > 3 %}{% if parts[0] == dir1 and parts[1] == dir2 %}{{ parts[2] }}|||{% endif %}{% endif %}{% endfor %}{% endcapture %}
+            {% assign dir3_list = dir3_raw | split: '|||' | where_exp: 'i', 'i != ""' | uniq | sort %}
+
+            {% if dir3_list.size > 0 %}
+              {% for dir3 in dir3_list %}
+                {% assign dir3_label = titles[dir3] | default: dir3 %}
+                <h4 class="kb-flat__h4" id="dir-{{ dir1 | slugify }}-{{ dir2 | slugify }}-{{ dir3 | slugify }}">{{ dir3_label }}</h4>
+                <ul class="kb-flat__list">
+                  {% for p in posts_sorted %}
+                    {% assign rel = p.path | remove_first: '_posts/' %}
+                    {% assign parts = rel | split: '/' %}
+                    {% if parts.size > 3 and parts[0] == dir1 and parts[1] == dir2 and parts[2] == dir3 %}
+                      <li class="kb-flat__item">
+                        <a class="kb-flat__link" href="{{ p.url | relative_url }}">{{ p.title }}</a>
+                        <span class="kb-flat__date">{{ p.date | date: '%Y-%m-%d' }}</span>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </section>
+    {% endfor %}
+  </div>
+</div>
