@@ -631,7 +631,7 @@ html {
   background-position: center;
 }
 
-.greedy-nav .visible-links a::before {
+.greedy-nav .visible-links a:not([href^="https://github.com/nk7667"])::before {
   content: none !important;
 }
 
@@ -924,6 +924,51 @@ body {
   flex: 0 0 auto;
   font-size: 0.75rem;
   color: #71717a;
+}
+
+@include breakpoint($large) {
+  #main {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr) 260px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .layout-3col__left {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: calc(100vh - 0.5rem);
+    overflow: auto;
+    padding-right: 0.25rem;
+  }
+
+  .layout-3col__main {
+    min-width: 0;
+  }
+
+  .layout-3col__right {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: calc(100vh - 0.5rem);
+    overflow: auto;
+    padding-left: 0.25rem;
+  }
+}
+
+@include breakpoint(max-width $large - 1px) {
+  #main {
+    display: block;
+  }
+
+  .layout-3col__left,
+  .layout-3col__right {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+  }
 }
 
 .kb-tree__link.is-active {

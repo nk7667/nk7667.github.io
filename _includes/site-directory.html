@@ -103,7 +103,7 @@
     {% for dir1 in dir1_list %}
       {% assign dir1_label = titles[dir1] | default: dir1 %}
       <section class="kb-flat" id="dir-{{ dir1 | slugify }}">
-        <h2 class="kb-flat__h2">{{ dir1_label }}</h2>
+        <div class="kb-flat__h2">{{ dir1_label }}</div>
 
         <ul class="kb-flat__list">
           {% for p in posts_sorted %}
@@ -133,7 +133,7 @@
         {% if dir2_list.size > 0 %}
           {% for dir2 in dir2_list %}
             {% assign dir2_label = titles[dir2] | default: dir2 %}
-            <h3 class="kb-flat__h3" id="dir-{{ dir1 | slugify }}-{{ dir2 | slugify }}">{{ dir2_label }}</h3>
+            <div class="kb-flat__h3" id="dir-{{ dir1 | slugify }}-{{ dir2 | slugify }}">{{ dir2_label }}</div>
 
             <ul class="kb-flat__list">
               {% for p in posts_sorted %}
@@ -154,7 +154,7 @@
             {% if dir3_list.size > 0 %}
               {% for dir3 in dir3_list %}
                 {% assign dir3_label = titles[dir3] | default: dir3 %}
-                <h4 class="kb-flat__h4" id="dir-{{ dir1 | slugify }}-{{ dir2 | slugify }}-{{ dir3 | slugify }}">{{ dir3_label }}</h4>
+                <div class="kb-flat__h4" id="dir-{{ dir1 | slugify }}-{{ dir2 | slugify }}-{{ dir3 | slugify }}">{{ dir3_label }}</div>
                 <ul class="kb-flat__list">
                   {% for p in posts_sorted %}
                     {% assign rel = p.path | remove_first: '_posts/' %}

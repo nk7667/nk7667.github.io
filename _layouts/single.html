@@ -19,9 +19,22 @@ layout: default
 {% endif %}
 
 <div id="main" role="main">
-  {% include sidebar.html %}
+  {% assign has_sidebar = false %}
+  {% if page.author_profile or layout.author_profile or page.sidebar or page.toc %}
+    {% assign has_sidebar = true %}
+  {% endif %}
 
-  <article class="page" itemscope itemtype="https://schema.org/CreativeWork"{% if page.locale %} lang="{{ page.locale }}"{% endif %}>
+  {% if has_sidebar %}
+    <div class="layout-3col__left">
+      {% if page.author_profile or layout.author_profile %}
+        {% include author-profile.html %}
+      {% endif %}
+
+      {% include site-directory-sidebar.html %}
+    </div>
+  {% endif %}
+
+  <article class="page{% if has_sidebar %} layout-3col__main{% endif %}" itemscope itemtype="https://schema.org/CreativeWork"{% if page.locale %} lang="{{ page.locale }}"{% endif %}>
     {% if page.title %}<meta itemprop="headline" content="{{ page.title | replace: '|', '&#124;' | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
     {% if page.excerpt %}<meta itemprop="description" content="{{ page.excerpt | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
     {% if page.date %}<meta itemprop="datePublished" content="{{ page.date | date_to_xmlschema }}">{% endif %}
@@ -30,7 +43,7 @@ layout: default
     <div class="page__inner-wrap">
       {% unless page.header.overlay_color or page.header.overlay_image %}
         <header>
-          {% if page.title -%}
+          {% if page.title and page.hide_title != true -%}
           <h1 id="page-title" class="page__title" itemprop="headline">
             <a href="{{ page.url | absolute_url }}" itemprop="url">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</a>
           </h1>
@@ -62,6 +75,20 @@ layout: default
     {% endif %}
   </article>
 
+  {% if page.toc %}
+    <div class="layout-3col__right">
+      <div class="sidebar-toc">
+        {% assign toc_title = page.toc_label | default: '本页目录' %}
+        <nav class="toc toc--sidebar toc--doc" aria-label="{{ toc_title }}">
+          <header class="toc--doc__head">
+            <p class="toc--doc__title"><span class="toc--doc__title-text">{{ toc_title }}</span></p>
+          </header>
+          {% include toc.html sanitize=true html=content h_min=2 h_max=4 class="toc__menu" skip_no_ids=true %}
+        </nav>
+      </div>
+    </div>
+  {% endif %}
+
   {% comment %}<!-- only show related on a post page when `related: true` -->{% endcomment %}
   {% if page.id and page.related and site.related_posts.size > 0 %}
     {% include page__related.html posts=site.related_posts %}
@@ -70,4 +97,3 @@ layout: default
     {% include page__related.html posts=site.posts %}
   {% endif %}
 </div>
-
