@@ -578,37 +578,33 @@ html {
 }
 
 @include breakpoint($large) {
-  .masthead {
+  .layout--single .masthead {
     z-index: 1000;
   }
 
-  .masthead__inner-wrap,
-  .masthead__menu,
-  .greedy-nav {
+  .layout--single .masthead__inner-wrap,
+  .layout--single .masthead__menu,
+  .layout--single .greedy-nav {
     position: relative;
     z-index: 1000;
   }
 
-  .sidebar.sticky.sidebar--stacked {
+  .layout--single .sidebar.sticky.sidebar--stacked {
     position: sticky;
     top: 0;
     z-index: 9999;
   }
 }
 
-.greedy-nav {
+.layout--single .greedy-nav {
   background: transparent !important;
 }
 
-.greedy-nav a.site-title {
-  display: none !important;
-}
-
-.greedy-nav .visible-links {
+.layout--single .greedy-nav .visible-links {
   justify-content: flex-start !important;
 }
 
-.greedy-nav .visible-links a {
+.layout--single .greedy-nav .visible-links a {
   margin: 0 !important;
   padding: 0.45rem 0.65rem;
   border-radius: 10px;
@@ -618,33 +614,24 @@ html {
   transition: background 0.12s ease, color 0.12s ease;
 }
 
-.greedy-nav .visible-links a[href^="https://github.com/nk7667"]::before {
-  content: "";
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  display: inline-block;
-  vertical-align: -5px;
-  margin-right: 0.4rem;
+.greedy-nav .visible-links a[href^="https://github.com/nk7667"] {
+  padding-left: 2.05rem;
   background-image: url("https://github.com/nk7667.png?size=64");
-  background-size: cover;
-  background-position: center;
+  background-size: 22px 22px;
+  background-position: 0.65rem 50%;
+  background-repeat: no-repeat;
 }
 
-.greedy-nav .visible-links a:not([href^="https://github.com/nk7667"])::before {
-  content: none !important;
-}
-
-.greedy-nav .visible-links a:hover {
+.layout--single .greedy-nav .visible-links a:hover {
   background: rgba(24, 24, 27, 0.06);
 }
 
-.greedy-nav__toggle {
+.layout--single .greedy-nav__toggle {
   border-radius: 10px;
   transition: background 0.12s ease;
 }
 
-.greedy-nav__toggle:hover {
+.layout--single .greedy-nav__toggle:hover {
   background: rgba(24, 24, 27, 0.06);
 }
 
