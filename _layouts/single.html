@@ -18,12 +18,12 @@ layout: default
   {% endunless %}
 {% endif %}
 
-<div id="main" role="main">
-  {% assign has_sidebar = false %}
-  {% if page.author_profile or layout.author_profile or page.sidebar or page.toc %}
-    {% assign has_sidebar = true %}
-  {% endif %}
+{% assign has_sidebar = false %}
+{% if page.author_profile or layout.author_profile or page.sidebar or page.toc %}
+  {% assign has_sidebar = true %}
+{% endif %}
 
+<div id="main" role="main"{% if has_sidebar %} class="layout-3col"{% endif %}>
   {% if has_sidebar %}
     <div class="layout-3col__left">
       {% if page.author_profile or layout.author_profile %}

@@ -714,20 +714,6 @@ body {
   grid-template-columns: 280px minmax(0, 1fr);
   gap: 2rem;
   margin-top: 0.25rem;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  padding-left: 1rem;
-  padding-right: 1rem;
-  overflow-x: clip;
-}
-
-@supports (width: 100dvw) {
-  .kb-index {
-    width: 100dvw;
-    margin-left: calc(50% - 50dvw);
-    margin-right: calc(50% - 50dvw);
-  }
 }
 
 .kb-index__sidebar {
@@ -927,7 +913,7 @@ body {
 }
 
 @include breakpoint($large) {
-  #main {
+  #main.layout-3col {
     display: grid;
     grid-template-columns: 280px minmax(0, 1fr) 260px;
     gap: 2rem;
@@ -958,7 +944,7 @@ body {
 }
 
 @include breakpoint(max-width $large - 1px) {
-  #main {
+  #main.layout-3col {
     display: block;
   }
 
@@ -969,6 +955,72 @@ body {
     overflow: visible;
     padding: 0;
   }
+}
+
+.layout-3col__right .toc--sidebar.toc--doc {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.layout-3col__right .toc--doc .toc--doc__head {
+  margin: 0 0 0.6rem 0;
+  padding: 0;
+  border: 0;
+}
+
+.layout-3col__right .toc--doc .toc--doc__title {
+  margin: 0 !important;
+  padding: 0 0 0.5rem 0 !important;
+  font-size: 0.925rem !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.01em !important;
+  color: #18181b !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid #e4e4e7 !important;
+  border-radius: 0 !important;
+}
+
+.layout-3col__right .toc--doc .toc__menu {
+  margin: 0 !important;
+  padding: 0.25rem 0 0 !important;
+  list-style: none !important;
+}
+
+.layout-3col__right .toc--doc .toc__menu a {
+  display: block !important;
+  padding: 0.25rem 0.35rem !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  color: #3f3f46 !important;
+  font-size: 0.825rem !important;
+  font-weight: 550 !important;
+}
+
+.layout-3col__right .toc--doc .toc__menu > li > a {
+  color: #18181b !important;
+  font-weight: 650 !important;
+}
+
+.layout-3col__right .toc--doc .toc__menu a:hover {
+  background: rgba(24, 24, 27, 0.06) !important;
+  color: #18181b !important;
+}
+
+.layout-3col__right .toc--doc .toc__menu li.active > a {
+  background: #e4e4e7 !important;
+  color: #18181b !important;
+  font-weight: 650 !important;
+}
+
+.layout-3col__right .toc--doc .toc__menu ul {
+  margin: 0.15rem 0 0.35rem 0 !important;
+  padding-left: 0.45rem !important;
+  border-left: 0 !important;
 }
 
 .kb-tree__link.is-active {
