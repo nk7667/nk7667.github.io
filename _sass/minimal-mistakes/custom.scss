@@ -623,8 +623,8 @@ html {
   justify-content: center;
   margin-left: 0.65rem;
   margin-right: 0.35rem;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   overflow: hidden;
   border: 1px solid rgba(228, 228, 231, 0.9);
@@ -817,6 +817,7 @@ body {
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.18rem 0;
+  min-width: 0;
 }
 
 .kb-tree__link {
@@ -842,6 +843,7 @@ body {
   flex: 0 0 auto;
   font-size: 0.75rem;
   color: #a1a1aa;
+  white-space: nowrap;
 }
 
 .kb-tree__list--sub {
@@ -900,6 +902,7 @@ body {
   justify-content: space-between;
   padding: 0.32rem 0;
   border-bottom: 1px solid rgba(228, 228, 231, 0.9);
+  min-width: 0;
 }
 
 .kb-flat__item:last-child {
@@ -926,6 +929,7 @@ body {
   flex: 0 0 auto;
   font-size: 0.75rem;
   color: #71717a;
+  white-space: nowrap;
 }
 
 @include breakpoint($large) {
