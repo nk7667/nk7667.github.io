@@ -37,7 +37,10 @@
     // Only sanitize once per page.
     if (container.dataset && container.dataset.sanitized === "1") return;
 
-    const clean = window.DOMPurify.sanitize(container.innerHTML, {
+    const originalHtml = container.innerHTML;
+    const originalText = (container.textContent || "").trim();
+
+    const clean = window.DOMPurify.sanitize(originalHtml, {
       // Keep common markdown-generated HTML + basic rich text.
       ALLOWED_TAGS: [
         "p",
@@ -116,6 +119,15 @@
 
     // Replace HTML after sanitize
     container.innerHTML = clean;
+
+    // Safety net: never blank a page that originally had text.
+    // Sanitizer is a defense layer; if allowlist is too strict, prefer content over emptiness.
+    const cleanedText = (container.textContent || "").trim();
+    if (originalText && !cleanedText) {
+      container.innerHTML = originalHtml;
+      if (container.dataset) container.dataset.sanitized = "0";
+      return;
+    }
 
     // Enforce URL protocol whitelist post-sanitize (defense-in-depth).
     container.querySelectorAll("a[href]").forEach((a) => {
