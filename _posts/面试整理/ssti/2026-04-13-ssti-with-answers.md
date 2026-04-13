@@ -1,6 +1,6 @@
 ---
 
-title: "面经 · 模板注入 SSTI · 问答"
+title: "模板注入 SSTI · 问答"
 series_order: 2
 date: 2026-04-13 12:00:00 +0800
 categories:

@@ -1,6 +1,6 @@
 ---
 
-title: "面经 · SSRF · 问答"
+title: "SSRF · 问答"
 series_order: 2
 date: 2026-04-13 12:00:00 +0800
 categories:

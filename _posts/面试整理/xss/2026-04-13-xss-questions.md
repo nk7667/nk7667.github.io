@@ -1,5 +1,5 @@
 ---
-title: "面经 · XSS · 纯问题"
+title: "XSS · 纯问题"
 series_order: 1
 date: 2026-04-13 12:00:00 +0800
 categories:
