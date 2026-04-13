@@ -4,3 +4,24 @@ java-base: Java 安全基础
 ssti: SSTI
 javassti: Java SSTI
 pythonssti: Python SSTI
+面经整理: 面经汇总
+access-control: 访问控制
+cdn-recon: 资产打点与CDN
+csrf: CSRF
+deserialization: 反序列化
+emergency: 应急响应
+file-upload: 文件上传
+intranet: 内网渗透
+jsonp: JSONP
+lfi: 文件包含
+logic: 逻辑漏洞
+middleware: 中间件安全
+misc: 杂项与综合
+pentest-report: 渗透报告与流程
+rce: RCE
+redis: Redis 安全
+sql: SQL 注入
+ssrf: SSRF
+waf-tools: WAF与工具
+xss: XSS
+xxe: XXE
