@@ -1,0 +1,31 @@
+{% comment %}
+  Override theme's post pagination.
+  Ensure "Previous/Next" labels never render empty.
+{% endcomment %}
+
+{% if page.previous or page.next %}
+  <nav class="pagination post-pagination" aria-label="文章分页导航">
+    <ul class="pagination__list">
+      {% if page.previous %}
+        {% assign prev_title = page.previous.title | default: "上一篇" %}
+        <li class="pagination__item pagination__item--prev">
+          <a class="pagination__link" href="{{ page.previous.url | relative_url }}" rel="prev">
+            <span class="pagination__label">Previous</span>
+            <span class="pagination__title">{{ prev_title }}</span>
+          </a>
+        </li>
+      {% endif %}
+
+      {% if page.next %}
+        {% assign next_title = page.next.title | default: "下一篇" %}
+        <li class="pagination__item pagination__item--next">
+          <a class="pagination__link" href="{{ page.next.url | relative_url }}" rel="next">
+            <span class="pagination__label">Next</span>
+            <span class="pagination__title">{{ next_title }}</span>
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}
+

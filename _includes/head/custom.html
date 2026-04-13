@@ -14,7 +14,7 @@
   CSP: block inline scripts & event handlers (e.g. <img onerror=...>).
   This is necessary because sanitizer runs after parsing; events can fire earlier.
 {%- endcomment -%}
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https:; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https:; font-src 'self' https: data:; upgrade-insecure-requests">
 
 <script src="{{ '/assets/js/code-copy.js' | relative_url }}?v={{ asset_v }}" defer></script>
 <script src="{{ '/assets/js/toc-scrollspy.js' | relative_url }}?v={{ asset_v }}" defer></script>
