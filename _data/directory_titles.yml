@@ -4,7 +4,7 @@ java-base: Java 安全基础
 ssti: SSTI
 javassti: Java SSTI
 pythonssti: Python SSTI
-面经整理: 面经汇总
+面试整理: 面试汇总
 access-control: 访问控制
 cdn-recon: 资产打点与CDN
 csrf: CSRF

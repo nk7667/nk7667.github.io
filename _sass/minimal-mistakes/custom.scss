@@ -1310,3 +1310,15 @@ body {
   font-size: 0.8125rem;
   color: #71717a;
 }
+
+.kb-tree__summary::marker,
+.kb-nav__summary::marker,
+.kb__summary::marker {
+  content: "" !important;
+}
+
+.kb-tree__summary,
+.kb-nav__summary,
+.kb__summary {
+  list-style: none !important;
+}
