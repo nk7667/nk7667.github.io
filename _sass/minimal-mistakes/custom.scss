@@ -1,6 +1,10 @@
 /* Minimal Mistakes 之上：本仓库「阅读/代码」主题（目录 + 代码块） */
 
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Noto+Sans+SC:wght@400;500;600;700&display=swap");
+
+/* 正文字体：几何无衬线 + 中文黑体，简约但不「系统默认感」 */
+$ui-sans: "DM Sans", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
 
 /* 标题锚点（Permalink）隐藏 */
 .page__content h1 .header-link,
@@ -255,11 +259,34 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  font-family: $ui-sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #18181b;
+  line-height: 1.58;
+  background: linear-gradient(165deg, #fafaf8 0%, #f3f2ee 55%, #ebe9e4 100%);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(37, 99, 235, 0.12);
+  color: inherit;
+}
+
 .page__content {
   h2,
   h3,
   h4 {
     scroll-margin-top: 3.25rem;
+    font-family: $ui-sans;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-weight: 700;
+    padding-bottom: 0.45em;
+    border-bottom-color: rgba(228, 228, 231, 0.95);
   }
 
   a {
@@ -304,20 +331,79 @@ html {
     border-top: 1px solid #e4e4e7;
   }
 
+  /* 表格：可读性 + 宽表横向滚动（保持 display:block 以在窄屏出现滚动条） */
   table {
     display: block;
     width: 100%;
+    max-width: 100%;
     overflow-x: auto;
     border-collapse: collapse;
     border-spacing: 0;
     -webkit-overflow-scrolling: touch;
+    margin: 1.35rem 0;
+    font-size: 0.925rem;
+    line-height: 1.5;
+    color: #27272a;
+    background: #fff;
+    border: 1px solid #d4d4d8;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+
+  table caption {
+    caption-side: top;
+    padding: 0 0 0.5rem 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #52525b;
+    text-align: left;
+  }
+
+  thead {
+    background: linear-gradient(180deg, #fafafa 0%, #f4f4f5 100%);
+  }
+
+  thead th {
+    font-weight: 600;
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+    color: #18181b;
+    border-bottom: 1px solid #d4d4d8;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    transition: background 0.1s ease;
+  }
+
+  tbody tr:nth-child(even) {
+    background: rgba(250, 250, 250, 0.85);
+  }
+
+  tbody tr:hover {
+    background: rgba(244, 244, 245, 0.95);
   }
 
   th,
   td {
     border: 1px solid #e4e4e7;
-    padding: 0.55rem 0.65rem;
+    padding: 0.62rem 0.75rem;
     vertical-align: top;
+    text-align: left;
+  }
+
+  tbody td {
+    border-top-color: #ececf0;
+  }
+
+  /* 无 <thead> 时（少数 Markdown）：首行当作表头，避免误伤有表头的表格 */
+  table:not(:has(thead)) tbody tr:first-child td {
+    font-weight: 600;
+    color: #18181b;
+    background: linear-gradient(180deg, #fafafa 0%, #f4f4f5 100%);
+    border-bottom: 1px solid #d4d4d8;
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
   }
 
   /* 段落级正文略小一号（标题、代码块不受影响） */
@@ -578,9 +664,68 @@ html {
 
 .masthead {
   border-bottom: 1px solid rgba(228, 228, 231, 0.9);
-  background: rgba(255, 255, 255, 0.75);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.65) inset;
+}
+
+/* 顶栏导航：全站统一（首页 layout--home 与文章页 layout--single 共用） */
+.greedy-nav .site-title {
+  font-family: $ui-sans;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #18181b;
+}
+
+.greedy-nav .site-subtitle {
+  font-weight: 500;
+  color: #71717a;
+  letter-spacing: 0;
+}
+
+/* 文章主栏：纸面卡片（三栏布局下的正文区） */
+.layout-3col .layout-3col__main.page {
+  background: #fff;
+  border-radius: 1rem;
+  border: 1px solid rgba(228, 228, 231, 0.75);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.035),
+    0 16px 40px -12px rgba(15, 23, 42, 0.09);
+  overflow: hidden;
+}
+
+.layout-3col .layout-3col__main .page__inner-wrap {
+  margin-top: 0;
+  padding: clamp(1.35rem, 2.2vw, 2.4rem) clamp(1.2rem, 2.4vw, 2.6rem) clamp(1.75rem, 2.5vw, 2.5rem);
+}
+
+.layout-3col .layout-3col__main .page__title {
+  font-family: $ui-sans;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  font-size: clamp(1.6rem, 2.2vw, 2.05rem);
+  line-height: 1.18;
+}
+
+.layout-3col .layout-3col__main .page__title a {
+  color: inherit;
+}
+
+/* 首页等：非三栏时主内容区同样纸面感 */
+#main > .page:not(.layout-3col__main) {
+  background: #fff;
+  border-radius: 1rem;
+  border: 1px solid rgba(228, 228, 231, 0.75);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.035),
+    0 16px 40px -12px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+#main > .page:not(.layout-3col__main) .page__inner-wrap {
+  margin-top: 0;
+  padding: clamp(1.35rem, 2.2vw, 2.25rem) clamp(1.2rem, 2.4vw, 2.35rem) clamp(1.65rem, 2.2vw, 2.25rem);
 }
 
 .layout--single #main {
@@ -590,13 +735,13 @@ html {
 }
 
 @include breakpoint($large) {
-  .layout--single .masthead {
+  .masthead {
     z-index: 1000;
   }
 
-  .layout--single .masthead__inner-wrap,
-  .layout--single .masthead__menu,
-  .layout--single .greedy-nav {
+  .masthead__inner-wrap,
+  .masthead__menu,
+  .greedy-nav {
     position: relative;
     z-index: 1000;
   }
@@ -608,15 +753,15 @@ html {
   }
 }
 
-.layout--single .greedy-nav {
+.greedy-nav {
   background: transparent !important;
 }
 
-.layout--single .greedy-nav .visible-links {
+.greedy-nav .visible-links {
   justify-content: flex-start !important;
 }
 
-.layout--single .greedy-nav .visible-links a {
+.greedy-nav .visible-links a {
   margin: 0 !important;
   padding: 0.45rem 0.65rem;
   border-radius: 10px;
@@ -651,26 +796,22 @@ html {
 }
 
 
-.layout--single .greedy-nav .visible-links a:hover {
+.greedy-nav .visible-links a:hover {
   background: rgba(24, 24, 27, 0.06);
 }
 
-.layout--single .greedy-nav__toggle {
+.greedy-nav__toggle {
   border-radius: 10px;
   transition: background 0.12s ease;
 }
 
-.layout--single .greedy-nav__toggle:hover {
+.greedy-nav__toggle:hover {
   background: rgba(24, 24, 27, 0.06);
 }
 
 .greedy-nav__toggle:focus-visible {
   outline: 2px solid rgba(63, 63, 70, 0.45);
   outline-offset: 2px;
-}
-
-body {
-  background: #fafafa;
 }
 
 .archive .list__item {
@@ -709,6 +850,25 @@ body {
 
 .archive .archive__item-excerpt {
   color: #52525b;
+}
+
+.page__footer {
+  margin-top: 2.5rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid rgba(228, 228, 231, 0.85);
+  color: #71717a;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.page__footer a {
+  color: #3f3f46;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.page__footer a:hover {
+  color: #18181b;
 }
 
 .sidebar-site-dir {
@@ -925,6 +1085,14 @@ body {
     max-height: calc(100vh - 0.5rem);
     overflow: auto;
     padding-right: 0.25rem;
+    /* 隐藏滚动条但保留滚动能力（目录很长时更“干净”） */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* legacy Edge/IE */
+  }
+
+  .layout-3col__left::-webkit-scrollbar {
+    width: 0;
+    height: 0;
   }
 
   .layout-3col__main {

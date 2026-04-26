@@ -1,6 +1,8 @@
 {% comment %}
   在 main.css 之后加载，强制覆盖侧栏目录（不依赖 Sass 合并是否生效）
 {% endcomment %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 {% if site.github.build_revision %}
   {% assign asset_v = site.github.build_revision | slice: 0, 7 %}
 {% else %}
