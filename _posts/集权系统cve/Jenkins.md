@@ -1,3 +1,11 @@
+---
+layout: single
+title: "Jenkins安全攻防实录——从CI/CD核心到内网突破口"
+date: 2026-06-29
+categories:
+  - 集权系统CVE
+---
+
 好的，我将为你分别讲解 Jenkins 和 JumpServer 的定位、经典漏洞原理、内网利用与隐蔽技巧，以及修复方案。
 
 ***

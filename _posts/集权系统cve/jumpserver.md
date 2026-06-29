@@ -1,3 +1,11 @@
+---
+layout: single
+title: "JumpServer安全攻防实录——堡垒机的攻破与防御"
+date: 2026-06-29
+categories:
+  - 集权系统CVE
+---
+
 # 博客二：JumpServer安全攻防实录——堡垒机的攻破与防御
 
 ## 1. JumpServer是什么
