@@ -66,18 +66,25 @@ exclude:
 # 作者侧栏
 author:
   name: nk7
-  bio: ""
+  avatar: "https://avatars.githubusercontent.com/nk7667"
+  bio: "你好这里是nk7，很荣幸您能访问我的博客！项目交流可以通过邮箱联系我。"
   location: "China"
   links:
     - label: GitHub
       icon: "fab fa-fw fa-github"
       url: "https://github.com/nk7667"
+    - label: Email
+      icon: "fas fa-fw fa-envelope"
+      url: "mailto:n18616992963@163.com"
 
 footer:
   links:
     - label: GitHub
       icon: "fab fa-fw fa-github"
       url: "https://github.com/nk7667"
+    - label: Email
+      icon: "fas fa-fw fa-envelope"
+      url: "mailto:n18616992963@163.com"
 
 defaults:
   - scope:
