@@ -1,9 +1,9 @@
 ---
 layout: single
-title: "JumpServer安全攻防实录——堡垒机的攻破与防御"
+title: "JumpServer堡垒机"
 date: 2026-06-29
 categories:
-  - 集权系统CVE
+  - 集权系统cve
 ---
 
 # 博客二：JumpServer安全攻防实录——堡垒机的攻破与防御
