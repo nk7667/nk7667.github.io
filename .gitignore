@@ -12,3 +12,6 @@ sstilabs-tmp/
 
 # 本地对照用，不参与 Sass 编译（与 _syntax.scss 二选一）
 _sass/minimal-mistakes/_syntax_ref.scss
+
+# 样式参考（anthropic-style-cn, shadcn/magicui/字体）
+anthropic-style-cn/
