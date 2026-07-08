@@ -15,3 +15,7 @@ _sass/minimal-mistakes/_syntax_ref.scss
 
 # 样式参考（anthropic-style-cn, shadcn/magicui/字体）
 anthropic-style-cn/
+
+# 本地环境文件
+.bundle/
+*.code-workspace
