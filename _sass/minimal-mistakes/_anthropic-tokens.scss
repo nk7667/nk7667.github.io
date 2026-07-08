@@ -1,0 +1,71 @@
+/*
+ * Anthropic-style 设计 Token（shadcn/magicui 暖纸色调 + 本地字体）
+ * 导入方式：在 custom.scss 头部 @import "minimal-mistakes/_anthropic-tokens";
+ */
+
+/* ═══════════════════════════════════════
+   颜色：暖纸调色板
+   ═══════════════════════════════════════ */
+$color-bg-base:        #ECE9E0;
+$color-bg-raised:      #F5F3EC;
+$color-bg-overlay:     #FDFCF8;
+$color-bg-inverted:    #141413;
+$color-text-primary:   #141413;
+$color-text-secondary: #6B6860;
+$color-text-muted:     #B0AEA5;
+$color-text-inverted:  #FAF9F5;
+$color-border-default: #D8D5CC;
+$color-border-subtle:  #E8E6DC;
+$color-border-strong:  #9B9890;
+
+/* 强调色：温暖橙调 */
+$color-accent-orange:  #D97757;
+$color-accent-warm:    #C96442;
+$color-accent-blue:    #6A9BCC;
+$color-accent-green:   #788C5D;
+$color-accent-sand:    #C4B99A;
+$color-success:        #6B8F47;
+$color-warning:        #C9943A;
+$color-error:          #C0453A;
+
+/* ── 语义别名 ── */
+$color-bg-surface:    $color-bg-raised;
+$color-bg-elevated:   $color-bg-overlay;
+$color-bg-card:       #ffffff;          /* 文章卡片纯白，略有呼吸感 */
+$color-border:        $color-border-default;
+$color-accent:        $color-accent-orange;
+$color-accent-dim:    rgba(217, 119, 87, 0.12);
+$color-text-accent:   $color-accent-warm;
+$color-text-disabled: $color-text-muted;
+
+/* ═══════════════════════════════════════
+   字体
+   ═══════════════════════════════════════ */
+$font-display:  'Lora', 'DM Serif Display', 'Georgia', serif;
+$font-heading:  'DM Sans', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+$font-body:     'Lora', 'DM Serif Text', 'Georgia', serif;
+$font-mono:     'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
+/* ═══════════════════════════════════════
+   阴影：暖色统一
+   ═══════════════════════════════════════ */
+$shadow-card:     0 2px 12px rgba(20, 20, 19, 0.07);
+$shadow-elevated: 0 8px 32px rgba(20, 20, 19, 0.08);
+$shadow-btn:      0 4px 12px rgba(217, 119, 87, 0.3);
+
+/* ═══════════════════════════════════════
+   圆角
+   ═══════════════════════════════════════ */
+$radius-sm:   4px;
+$radius-md:   8px;
+$radius-lg:   16px;
+$radius-xl:   24px;
+$radius-full: 9999px;
+
+/* ═══════════════════════════════════════
+   动效
+   ═══════════════════════════════════════ */
+$ease-default: cubic-bezier(0.16, 1, 0.3, 1);
+$duration-fast:   150ms;
+$duration-normal: 250ms;
+$duration-slow:   400ms;

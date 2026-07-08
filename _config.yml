@@ -1,5 +1,5 @@
-# Minimal Mistakes（远程主题）— 文档：https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
-remote_theme: mmistakes/minimal-mistakes@4.26.2
+# Minimal Mistakes（本地 gem 主题）— 文档：https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
+theme: minimal-mistakes-jekyll
 minimal_mistakes_skin: "air"
 
 locale: zh-CN

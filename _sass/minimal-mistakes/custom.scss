@@ -1,9 +1,8 @@
 /* Minimal Mistakes 之上：本仓库「阅读/代码」主题（目录 + 代码块） */
 
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Noto+Sans+SC:wght@400;500;600;700&display=swap");
+@import "minimal-mistakes/_anthropic-tokens";
 
-/* 正文字体：几何无衬线 + 中文黑体，简约但不「系统默认感」 */
+/* 正文字体：DM Sans（本地woff2）+ 中文黑体兜底 */
 $ui-sans: "DM Sans", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
 
 /* 标题锚点（Permalink）隐藏 */
@@ -20,7 +19,7 @@ $ui-sans: "DM Sans", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-
    代码块：灰色深色底 + 浅色字（MM variables 里 Base16，与 _syntax.scss 一致）
    Rouge token 颜色在 _syntax.scss 的 .highlight 中，勿在浅色底上硬套
    ------------------------------------------------------------------------- */
-$page__code-font: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+$page__code-font: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 $page__code-bg: $base00;
 $page__code-border: $base03;
 $page__code-fg: $base05;
@@ -239,9 +238,9 @@ $page__code-fg: $base05;
   font-weight: 500 !important;
   padding: 0.12em 0.4em !important;
   border-radius: 4px !important;
-  background: #eef2f6 !important;
-  border: 1px solid #c5ced9 !important;
-  color: #24292f !important;
+  background: $color-bg-raised !important;
+  border: 1px solid $color-border-subtle !important;
+  color: $color-accent-warm !important;
 }
 
 .page__content :not(pre) > code::before,
@@ -263,14 +262,14 @@ body {
   font-family: $ui-sans;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #18181b;
+  color: $color-text-primary;
   line-height: 1.58;
-  background: linear-gradient(165deg, #fafaf8 0%, #f3f2ee 55%, #ebe9e4 100%);
+  background: $color-bg-base;
   background-attachment: fixed;
 }
 
 ::selection {
-  background: rgba(37, 99, 235, 0.12);
+  background: $color-accent-dim;
   color: inherit;
 }
 
@@ -292,17 +291,19 @@ body {
   a {
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
+    color: $color-accent-warm;
   }
 
   a:hover {
     text-decoration-thickness: 2px;
+    color: darken($color-accent-warm, 8%);
   }
 
   img {
     max-width: 100%;
     height: auto;
     border-radius: 10px;
-    border: 1px solid #e4e4e7;
+    border: 1px solid $color-border-subtle;
     background: #fff;
   }
 
@@ -343,11 +344,11 @@ body {
     margin: 1.35rem 0;
     font-size: 0.925rem;
     line-height: 1.5;
-    color: #27272a;
+    color: $color-text-primary;
     background: #fff;
-    border: 1px solid #d4d4d8;
+    border: 1px solid $color-border-default;
     border-radius: 10px;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 1px 2px rgba(20, 20, 19, 0.04);
   }
 
   table caption {
@@ -410,7 +411,7 @@ body {
   p,
   ul li,
   ol li {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
   }
 }
 
@@ -658,8 +659,8 @@ body {
 }
 
 .masthead {
-  border-bottom: 1px solid rgba(228, 228, 231, 0.9);
-  background: rgba(255, 255, 255, 0.82);
+  border-bottom: 1px solid $color-border-subtle;
+  background: rgba(253, 252, 248, 0.85);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
   backdrop-filter: blur(14px) saturate(1.2);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.65) inset;
@@ -682,10 +683,10 @@ body {
 .layout-3col .layout-3col__main.page {
   background: #fff;
   border-radius: 1rem;
-  border: 1px solid rgba(228, 228, 231, 0.75);
+  border: 1px solid $color-border-subtle;
   box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.035),
-    0 16px 40px -12px rgba(15, 23, 42, 0.09);
+    0 1px 2px rgba(20, 20, 19, 0.04),
+    0 16px 40px -12px rgba(20, 20, 19, 0.1);
   overflow: hidden;
 }
 
@@ -699,17 +700,17 @@ body {
 #main > .page:not(.layout-3col__main) header {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(228, 228, 231, 0.6);
+  border-bottom: 1px solid $color-border-subtle;
 }
 
 .layout-3col .layout-3col__main .page__title,
 #main > .page:not(.layout-3col__main) .page__title {
-  font-family: $ui-sans;
-  font-weight: 800;
+  font-family: $font-display;
+  font-weight: 700;
   letter-spacing: -0.04em;
   font-size: clamp(1.65rem, 2.5vw, 2.15rem);
   line-height: 1.15;
-  color: #18181b;
+  color: $color-text-primary;
   margin-bottom: 0.75rem !important;
 }
 
@@ -737,72 +738,76 @@ body {
 
 /* ── 文章正文排版 ── */
 .page__content p {
-  margin-bottom: 1.15em;
-  line-height: 1.72;
-  color: #3f3f46;
+  margin-bottom: 1.1em;
+  font-size: 0.92rem;
+  line-height: 1.68;
+  color: $color-text-secondary;
 }
 
 .page__content ul,
 .page__content ol {
-  margin-bottom: 1.1em;
-  padding-left: 1.4em;
-  line-height: 1.65;
-  color: #3f3f46;
+  margin-bottom: 1.05em;
+  padding-left: 1.3em;
+  font-size: 0.92rem;
+  line-height: 1.62;
+  color: $color-text-secondary;
 }
 
 .page__content li {
-  margin-bottom: 0.35em;
+  margin-bottom: 0.3em;
 }
 
 .page__content li > ul,
 .page__content li > ol {
-  margin-top: 0.3em;
-  margin-bottom: 0.3em;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
 }
 
 /* 正文标题层次 */
 .page__content h2 {
-  font-size: 1.375rem;
+  font-size: 1.35rem;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: #18181b;
-  margin-top: 2.5em;
-  margin-bottom: 0.8em;
-  padding-bottom: 0.4em;
-  border-bottom: 1px solid rgba(228, 228, 231, 0.7);
+  color: $color-text-primary;
+  margin-top: 2.8em;
+  margin-bottom: 0.75em;
+  padding-bottom: 0.45em;
+  border-bottom: 1px solid $color-border-subtle;
 }
 
 .page__content h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 650;
   letter-spacing: -0.02em;
-  color: #27272a;
-  margin-top: 2em;
-  margin-bottom: 0.6em;
+  color: #18181b;
+  margin-top: 2.2em;
+  margin-bottom: 0.55em;
 }
 
 .page__content h4 {
   font-size: 1rem;
   font-weight: 600;
   color: #3f3f46;
-  margin-top: 1.6em;
-  margin-bottom: 0.5em;
+  margin-top: 1.8em;
+  margin-bottom: 0.45em;
 }
 
 .page__content h5 {
-  font-size: 0.9375rem;
+  font-size: 0.92rem;
   font-weight: 600;
   color: #52525b;
+  margin-top: 1.5em;
+  margin-bottom: 0.4em;
 }
 
 /* 引用块：柔和灰底 + 细线 */
 .page__content blockquote {
   margin: 1.5em 0;
   padding: 1rem 1.25rem;
-  border-left: 3px solid #d4d4d8;
+  border-left: 3px solid $color-border-default;
   border-radius: 8px;
-  background: rgba(250, 250, 250, 0.95);
-  color: #52525b;
+  background: $color-bg-raised;
+  color: $color-text-secondary;
   font-size: 0.9375rem;
   line-height: 1.65;
 }
@@ -812,7 +817,35 @@ body {
 }
 
 .page__content blockquote strong {
-  color: #27272a;
+  color: $color-text-primary;
+}
+
+/* 引用块语义变体：tip / warning / info */
+.page__content blockquote.notice--tip {
+  border-left-color: #22c55e;
+  background: #f0fdf4;
+}
+
+.page__content blockquote.notice--tip strong {
+  color: #166534;
+}
+
+.page__content blockquote.notice--warning {
+  border-left-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.page__content blockquote.notice--warning strong {
+  color: #92400e;
+}
+
+.page__content blockquote.notice--info {
+  border-left-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.page__content blockquote.notice--info strong {
+  color: #1e40af;
 }
 
 /* 分隔线 */
@@ -820,7 +853,7 @@ body {
   margin: 2.5rem 0;
   border: 0;
   height: 1px;
-  background: linear-gradient(to right, transparent, #d4d4d8 20%, #d4d4d8 80%, transparent);
+  background: linear-gradient(to right, transparent, $color-border-default 20%, $color-border-default 80%, transparent);
 }
 
 /* 图片 */
@@ -942,7 +975,7 @@ body {
   margin: 0 !important;
   padding: 0.45rem 0.65rem;
   border-radius: 10px;
-  color: #18181b;
+  color: $color-text-primary;
   font-weight: 600;
   letter-spacing: -0.01em;
   transition: background 0.12s ease, color 0.12s ease;
@@ -993,7 +1026,7 @@ body {
 
 .archive .list__item {
   padding: 1.05rem 1.05rem;
-  border: 1px solid #e4e4e7;
+  border: 1px solid $color-border-subtle;
   border-radius: 14px;
   background: #ffffff;
   transition: box-shadow 0.12s ease, transform 0.12s ease, border-color 0.12s ease;
@@ -1004,8 +1037,8 @@ body {
 }
 
 .archive .list__item:hover {
-  border-color: #d4d4d8;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+  border-color: $color-border-default;
+  box-shadow: 0 10px 24px rgba(20, 20, 19, 0.07);
   transform: translateY(-1px);
 }
 
@@ -1015,7 +1048,7 @@ body {
 }
 
 .archive .archive__item-title a {
-  color: #18181b;
+  color: $color-text-primary;
   text-decoration: none;
 }
 
@@ -1032,20 +1065,20 @@ body {
 .page__footer {
   margin-top: 2.5rem;
   padding-top: 1.35rem;
-  border-top: 1px solid rgba(228, 228, 231, 0.85);
-  color: #71717a;
+  border-top: 1px solid $color-border-subtle;
+  color: $color-text-muted;
   font-size: 0.875rem;
   line-height: 1.55;
 }
 
 .page__footer a {
-  color: #3f3f46;
+  color: $color-text-secondary;
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
 
 .page__footer a:hover {
-  color: #18181b;
+  color: $color-text-primary;
 }
 
 .sidebar-site-dir {
@@ -1054,12 +1087,14 @@ body {
 }
 
 .kb-tree__heading {
-  margin: 0 0 0.5rem 0;
-  font-size: 0.8rem;
-  font-weight: 750;
+  margin: 0 0 0.6rem 0;
+  padding: 0 0 0.5rem 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
   letter-spacing: -0.01em;
   color: #71717a;
   text-transform: none;
+  border-bottom: 0 !important;
 }
 
 
@@ -1076,10 +1111,16 @@ body {
 .kb-tree__summary {
   list-style: none;
   cursor: pointer;
-  padding: 0.25rem 0.1rem;
-  font-size: 0.95rem;
-  font-weight: 750;
+  padding: 0.22rem 0.08rem;
+  font-size: 0.82rem;
+  font-weight: 650;
   color: #18181b;
+  border-radius: 8px;
+  transition: background 0.12s ease;
+}
+
+.kb-tree__summary:hover {
+  background: rgba(24, 24, 27, 0.06);
 }
 
 .kb-tree__summary::-webkit-details-marker {
@@ -1099,13 +1140,13 @@ body {
 }
 
 .kb-tree__summary--sub {
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 650;
 }
 
 .kb-tree__summary--sub2 {
-  font-size: 0.85rem;
-  font-weight: 650;
+  font-size: 0.78rem;
+  font-weight: 600;
   color: #3f3f46;
 }
 
@@ -1123,8 +1164,8 @@ body {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.18rem 0;
+  gap: 0.5rem;
+  padding: 0.12rem 0;
   min-width: 0;
 }
 
@@ -1133,12 +1174,14 @@ body {
   flex: 1 1 auto;
   min-width: 0;
   text-decoration: none;
-  color: #3f3f46;
-  font-size: 0.825rem;
+  color: #52525b;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 0.15rem 0.25rem;
+  padding: 0.22rem 0.3rem;
   border-radius: 8px;
 }
 
@@ -1149,7 +1192,7 @@ body {
 
 .kb-tree__date {
   flex: 0 0 auto;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: #a1a1aa;
   white-space: nowrap;
 }
@@ -1252,17 +1295,103 @@ body {
   }
 
   #main.layout-3col.layout-3col--3col {
-    grid-template-columns: 280px minmax(0, 1fr) 260px;
+    grid-template-columns: 248px minmax(0, 1fr) 220px;
+  }
+
+  /* 左侧目录折叠按钮 */
+  .sidebar-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    margin-right: 0.35rem;
+    border: 1px solid rgba(228, 228, 231, 0.8);
+    border-radius: 5px;
+    background: transparent;
+    color: #71717a;
+    font-size: 0.55rem;
+    line-height: 1;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+
+  .sidebar-toggle-btn:hover {
+    background: #f4f4f5;
+    color: #18181b;
+  }
+
+  /* 折叠状态：左侧栏隐藏，文章区加宽 */
+  #main.layout-3col--left-collapsed {
+    grid-template-columns: 0px minmax(0, 1fr) 220px !important;
+    gap: 0 2rem !important;
+  }
+
+  #main.layout-3col--left-collapsed .layout-3col__left {
+    overflow: visible;
+    padding: 0;
+    max-height: none;
+    position: sticky;
+  }
+
+  #main.layout-3col--left-collapsed .layout-3col__left .sidebar-site-dir .kb-nav,
+  #main.layout-3col--left-collapsed .layout-3col__left .sidebar-toc,
+  #main.layout-3col--left-collapsed .layout-3col__left .author__content,
+  #main.layout-3col--left-collapsed .layout-3col__left .author__urls-wrapper {
+    display: none;
+  }
+
+  #main.layout-3col--left-collapsed .kb-tree__heading {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    color: transparent;
+    font-size: 0;
+  }
+
+  #main.layout-3col--left-collapsed .sidebar-toggle-btn {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    right: auto;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 56px;
+    border-radius: 0 8px 8px 0;
+    border-left: 0;
+    margin: 0;
+    opacity: 0.55;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 1px 0 6px rgba(0, 0, 0, 0.06);
+    font-size: 0.55rem;
+  }
+
+  #main.layout-3col--left-collapsed .sidebar-toggle-btn:hover {
+    opacity: 1;
+    background: #f4f4f5;
+  }
+
+  #main.layout-3col--left-collapsed .sidebar-toggle-btn__icon {
+    display: inline-block;
+    transform: rotate(180deg);
+  }
+
+  /* 2-col 布局折叠（无右侧栏时） */
+  #main.layout-3col--2col.layout-3col--left-collapsed {
+    grid-template-columns: 0px minmax(0, 1fr) !important;
+    gap: 0 2rem !important;
   }
 
   .layout-3col__left {
     position: sticky;
-    top: 0;
+    top: 1rem;
     align-self: start;
-    max-height: calc(100vh - 0.5rem);
+    max-height: calc(100vh - 2rem);
     overflow: auto;
-    padding-right: 0.25rem;
-    /* 隐藏滚动条但保留滚动能力（目录很长时更“干净”） */
+    padding-right: 0.15rem;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* legacy Edge/IE */
   }
@@ -1289,11 +1418,11 @@ body {
 
   .layout-3col__right {
     position: sticky;
-    top: 0;
+    top: 1rem;
     align-self: start;
-    max-height: calc(100vh - 0.5rem);
+    max-height: calc(100vh - 2rem);
     overflow: auto;
-    padding-left: 0.25rem;
+    padding-left: 0.15rem;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -1337,10 +1466,10 @@ body {
 .layout-3col__right .toc--doc .toc--doc__title {
   margin: 0 !important;
   padding: 0 0 0.5rem 0 !important;
-  font-size: 0.925rem !important;
-  font-weight: 750 !important;
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
   letter-spacing: -0.01em !important;
-  color: #18181b !important;
+  color: #71717a !important;
   background: transparent !important;
   border: 0 !important;
   border-bottom: 0 !important;
@@ -1355,12 +1484,13 @@ body {
 
 .layout-3col__right .toc--doc .toc__menu a {
   display: block !important;
-  padding: 0.25rem 0.35rem !important;
+  padding: 0.22rem 0.3rem !important;
   border-radius: 8px !important;
   text-decoration: none !important;
-  color: #3f3f46 !important;
-  font-size: 0.825rem !important;
-  font-weight: 550 !important;
+  color: #52525b !important;
+  font-size: 0.78rem !important;
+  line-height: 1.45 !important;
+  font-weight: 500 !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
@@ -1368,7 +1498,7 @@ body {
 
 .layout-3col__right .toc--doc .toc__menu > li > a {
   color: #18181b !important;
-  font-weight: 650 !important;
+  font-weight: 600 !important;
 }
 
 .layout-3col__right .toc--doc .toc__menu a:hover {
@@ -1429,22 +1559,23 @@ body {
 .kb-nav__summary {
   list-style: none;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 650;
   color: #18181b;
-  font-size: 0.875rem;
-  padding: 0.25rem 0.1rem;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  padding: 0.2rem 0.08rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .kb-nav__summary--sub {
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .kb-nav__sub-item a {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .kb-nav__summary::-webkit-details-marker {
@@ -1482,11 +1613,12 @@ body {
 
 .kb-nav__sub-item a {
   display: block;
-  padding: 0.2rem 0.25rem;
+  padding: 0.18rem 0.22rem;
   border-radius: 8px;
   text-decoration: none;
-  color: #3f3f46;
-  font-size: 0.825rem !important;
+  color: #52525b;
+  font-size: 0.76rem !important;
+  line-height: 1.45;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1498,12 +1630,13 @@ body {
 
 .kb-nav__sub2-item a {
   display: block;
-  padding: 0.18rem 0.25rem;
+  padding: 0.16rem 0.22rem;
   border-radius: 8px;
   text-decoration: none;
-  color: #52525b;
-  font-size: 0.825rem !important;
-  font-weight: 600;
+  color: #71717a;
+  font-size: 0.75rem !important;
+  font-weight: 550;
+  line-height: 1.4;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1763,23 +1896,47 @@ body {
   color: #52525b;
 }
 
-/* 首页文章列表项：干净紧凑 */
-.layout--home .archive__item {
-  padding: 0.75rem 0;
+/* 首页文章列表：卡片流 */
+.entries-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
   margin: 0;
-  border-bottom: 1px solid rgba(228, 228, 231, 0.6);
+  padding: 0;
+  list-style: none;
 }
 
-.layout--home .archive__item:last-child {
-  border-bottom: 0;
+.layout--home .list__item {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.layout--home .archive__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.15rem 1.25rem;
+  margin: 0;
+  border: 1px solid $color-border-subtle;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(20, 20, 19, 0.03);
+  transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+}
+
+.layout--home .archive__item:hover {
+  border-color: rgba(212, 212, 216, 0.7);
+  box-shadow: 0 6px 20px rgba(20, 20, 19, 0.07);
+  transform: translateY(-2px);
 }
 
 .layout--home .archive__item-title {
-  margin-top: 0 !important;
-  font-size: 1rem !important;
-  font-weight: 600 !important;
-  letter-spacing: -0.01em !important;
-  line-height: 1.4 !important;
+  margin: 0 !important;
+  font-size: 1.05rem !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.35 !important;
   color: #18181b !important;
 }
 
@@ -1788,19 +1945,40 @@ body {
 }
 
 .layout--home .archive__item-title a:hover {
-  color: #2563eb !important;
+  color: $color-accent-warm !important;
+}
+
+/* 日期 + 标签行 */
+.layout--home .archive__item-date {
+  font-size: 0.78rem;
+  color: #a1a1aa;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.layout--home .archive__item-cats {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.layout--home .archive__item-cat {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 550;
+  line-height: 1.5;
+  color: #52525b;
+  background: #f4f4f5;
+  border: 1px solid rgba(228, 228, 231, 0.7);
 }
 
 .layout--home .archive__item-excerpt {
   font-size: 0.85rem !important;
-  line-height: 1.45 !important;
+  line-height: 1.5 !important;
   color: #71717a !important;
-  margin-top: 0.25rem !important;
-}
-
-.layout--home .page__meta {
-  font-size: 0.75rem !important;
-  color: #a1a1aa !important;
+  margin-top: 0.15rem !important;
 }
 
 @media (max-width: 540px) {

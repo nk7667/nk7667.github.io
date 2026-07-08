@@ -24,7 +24,12 @@
 
 <div class="sidebar-site-dir">
   <nav class="toc toc--sidebar toc--doc" aria-label="站点目录">
-    <h3 class="kb-tree__heading">文档</h3>
+    <h3 class="kb-tree__heading">
+      <button class="sidebar-toggle-btn" aria-label="折叠左侧目录" title="折叠左侧目录">
+        <span class="sidebar-toggle-btn__icon">◀</span>
+      </button>
+      文档
+    </h3>
     <div class="kb-nav">
       <ul class="toc__menu kb-nav__menu">
         {% for dir1 in dir1_list limit: 20 %}
@@ -35,7 +40,7 @@
 
           <li class="kb-nav__item">
             <details class="kb-nav__details" open>
-              <summary class="kb-nav__summary"><strong>{{ dir1_label }}</strong></summary>
+              <summary class="kb-nav__summary">{{ dir1_label }}</summary>
               <div class="kb-nav__content">
                 {% capture posts1_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size == 2 and parts[0] == dir1 %}{{ p.url | relative_url }}:::{{ p.title }}|||{% endif %}{% endfor %}{% endcapture %}
                 {% assign posts1_list = posts1_raw | split: '|||' | where_exp: 'i', 'i != ""' %}
@@ -47,7 +52,7 @@
                       {% assign post_url = parts1[0] %}
                       {% assign post_title = parts1[1] %}
                       <li class="kb-nav__sub-item">
-                        <a class="kb-tree__link{% if post_url == current_url %} is-active{% endif %}" href="{{ post_url }}">{{ post_title }}</a>
+                        <a class="kb-tree__link{% if post_url == current_url %} is-active{% endif %}" href="{{ post_url }}" title="{{ post_title | escape }}">{{ post_title }}</a>
                       </li>
                     {% endfor %}
                   </ul>
@@ -74,7 +79,7 @@
                                 {% assign post_url = parts2[0] %}
                                 {% assign post_title = parts2[1] %}
                                 <li class="kb-nav__sub2-item">
-                                  <a class="kb-tree__link{% if post_url == current_url %} is-active{% endif %}" href="{{ post_url }}">{{ post_title }}</a>
+                                  <a class="kb-tree__link{% if post_url == current_url %} is-active{% endif %}" href="{{ post_url }}" title="{{ post_title | escape }}">{{ post_title }}</a>
                                 </li>
                               {% endfor %}
                               {% for dir3 in dir3_list %}
