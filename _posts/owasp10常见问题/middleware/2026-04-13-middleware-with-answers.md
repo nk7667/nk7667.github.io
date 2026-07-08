@@ -1,4 +1,4 @@
----
+﻿---
 title: "中间件与组件 · 问答"
 series_order: 2
 date: 2026-04-13 12:00:00 +0800
@@ -35,7 +35,7 @@ MongoDB
 Redis
 GlassFish
 
-面试题+答案：
+
 
 你知道那些web中间件漏洞？
 3. tomcat put写任意文件和远程代码执行

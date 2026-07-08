@@ -1,4 +1,4 @@
----
+﻿---
 title: "应急响应 · 问答"
 series_order: 2
 date: 2026-04-13 12:00:00 +0800
@@ -31,7 +31,7 @@ categories:
 Chkrootkit
 Rkhunter
 
-面试题+答案：
+
 
 内存马
 tomcat的servletAPI型内存马为例

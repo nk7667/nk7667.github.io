@@ -1,4 +1,4 @@
----
+﻿---
 title: "Redis · 问答"
 series_order: 2
 date: 2026-04-13 12:00:00 +0800
@@ -10,7 +10,7 @@ categories:
 
 十二、Redis / 未授权
 
-面试题+答案：
+
 
 你刚才说到了redis未授权，可以说一下他的提权方式吗？
 1. 写计划任务，只能centos，Ubuntu没有执行权限

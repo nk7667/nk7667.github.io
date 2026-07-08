@@ -1,4 +1,4 @@
----
+﻿---
 title: "内网与域 · 问答"
 series_order: 2
 date: 2026-04-13 12:00:00 +0800
@@ -41,7 +41,7 @@ nltest /DCLIST:pentest.com
 8. 有哪些反向代理的工具?
 reGeirg、EW、lcx、Ngrok、frp
 
-面试题+答案：
+
 
 UDF提权原理？
 9. UDF(user-defined function) 是 MySQL 的一个拓展接口，也可称之为用户自定义函数
