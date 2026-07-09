@@ -11,3 +11,4 @@ categories:
 
 1. Redis 未授权时，常见「提权/利用」方式有哪些？（写计划任务、SSH 公钥、WebShell、主从、Lua 等）
 2. Redis 未授权的防护思路有哪些？
+3. Redis 一般跑在哪个端口？常见利用方式有哪些？

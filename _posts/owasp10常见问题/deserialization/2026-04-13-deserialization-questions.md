@@ -15,3 +15,6 @@ categories:
 4. FastJson 1.2.24 反序列化漏洞原理是什么？典型 `JdbcRowSetImpl` + JNDI 的利用点在哪里？
 5. Log4j2（Log4Shell）为什么会触发 JNDI？核心成因与修复思路是什么？
 6. JNDI 是做什么的？正常用途与被滥用的风险分别是什么？
+7. 反序列化链里，哪些魔术方法/触发点值得重点找？
+8. 遇到 Shiro、Fastjson、WebLogic 站点时，排查思路是什么？
+9. 反序列化常见函数有哪些？

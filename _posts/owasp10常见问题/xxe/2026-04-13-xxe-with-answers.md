@@ -140,3 +140,7 @@ DocumentBuilder builder = factory.newDocumentBuilder();
 - **排查**：按技术栈搜所有 XML 解析点；列出 SOAP、SAML、上传、Webhook 等场景；对入口做基础回显 + OOB PoC。
 - **修复**：统一安全封装类中配置特性；网关/WAF 限制访问内网段与元数据；上传场景加强校验与沙箱解析。
 - **经验补充**（示例表述）：曾只在一处 `DocumentBuilder` 上加固，后来发现 DOM4J/JAXB 等其它入口，现要求**所有 XML 解析必须走统一安全封装**。
+
+#### 21. XXE 会用到哪些函数或关键点？
+
+严格说 XXE 更依赖 XML 解析器配置和 DTD/实体机制，不是像 RCE 一样单看某个危险函数。实战里重点关注的是：`DocumentBuilderFactory`、`SAXParserFactory`、DOM4J `SAXReader`、JAXB、StAX 等解析入口，以及是否允许 `DOCTYPE`、外部实体、外部 DTD 和实体展开。
