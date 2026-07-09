@@ -19,3 +19,6 @@ anthropic-style-cn/
 # 本地环境文件
 .bundle/
 *.code-workspace
+
+# 面经目录（仅本地保留，已迁移至私有仓库 blog_for_review，公开仓库不发布）
+_posts/owasp10常见问题/
