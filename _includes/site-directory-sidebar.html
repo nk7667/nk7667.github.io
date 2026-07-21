@@ -35,12 +35,20 @@
         {% for dir1 in dir1_list limit: 20 %}
           {% assign dir1_label = titles[dir1] | default: dir1 %}
 
+          {% comment %}查找一级目录介绍页：标题含「介绍」或「项目介绍」的直接子文章{% endcomment %}
+          {% assign dir1_intro_url = '' %}
+          {% capture intro1_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size == 2 and parts[0] == dir1 %}{% if p.title contains '介绍' %}{{ p.url | relative_url }}|||{% endif %}{% endif %}{% endfor %}{% endcapture %}
+          {% assign intro1_list = intro1_raw | split: '|||' | where_exp: 'i', 'i != ""' %}
+          {% if intro1_list.size > 0 %}
+            {% assign dir1_intro_url = intro1_list[0] %}
+          {% endif %}
+
           {% capture dir2_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size > 2 %}{% if parts[0] == dir1 %}{{ parts[1] }}|||{% endif %}{% endif %}{% endfor %}{% endcapture %}
           {% assign dir2_list = dir2_raw | split: '|||' | where_exp: 'i', 'i != ""' | uniq | sort %}
 
           <li class="kb-nav__item">
             <details class="kb-nav__details" open>
-              <summary class="kb-nav__summary">{{ dir1_label }}</summary>
+              <summary class="kb-nav__summary">{% if dir1_intro_url != '' %}<a class="kb-nav__summary-link" href="{{ dir1_intro_url }}" title="{{ dir1_label | escape }} · 介绍">{{ dir1_label }}</a>{% else %}{{ dir1_label }}{% endif %}</summary>
               <div class="kb-nav__content">
                 {% capture posts1_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size == 2 and parts[0] == dir1 %}{{ p.url | relative_url }}:::{{ p.title }}|||{% endif %}{% endfor %}{% endcapture %}
                 {% assign posts1_list = posts1_raw | split: '|||' | where_exp: 'i', 'i != ""' %}
@@ -71,8 +79,15 @@
 
                       {% if dir3_list.size > 0 or posts2_list.size > 0 %}
                         <li class="kb-nav__sub-item">
+                          {% comment %}查找二级目录介绍页{% endcomment %}
+                          {% assign dir2_intro_url = '' %}
+                          {% capture intro2_raw %}{% for p in posts_sorted %}{% assign rel = p.path | remove_first: '_posts/' %}{% assign parts = rel | split: '/' %}{% if parts.size == 3 and parts[0] == dir1 and parts[1] == dir2 %}{% if p.title contains '介绍' %}{{ p.url | relative_url }}|||{% endif %}{% endif %}{% endfor %}{% endcapture %}
+                          {% assign intro2_list = intro2_raw | split: '|||' | where_exp: 'i', 'i != ""' %}
+                          {% if intro2_list.size > 0 %}
+                            {% assign dir2_intro_url = intro2_list[0] %}
+                          {% endif %}
                           <details class="kb-nav__details kb-nav__details--sub" open>
-                            <summary class="kb-nav__summary kb-nav__summary--sub">{{ dir2_label }}</summary>
+                            <summary class="kb-nav__summary kb-nav__summary--sub">{% if dir2_intro_url != '' %}<a class="kb-nav__summary-link" href="{{ dir2_intro_url }}" title="{{ dir2_label | escape }} · 介绍">{{ dir2_label }}</a>{% else %}{{ dir2_label }}{% endif %}</summary>
                             <ul class="kb-nav__sub2">
                               {% for item in posts2_list %}
                                 {% assign parts2 = item | split: ':::' %}

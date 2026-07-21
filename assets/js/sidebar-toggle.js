@@ -22,9 +22,22 @@
     });
   }
 
+  // 目录 summary 内链接：阻止冒泡，避免同时触发展开/折叠
+  function initSummaryLinks() {
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('.kb-nav__summary-link')) {
+        e.stopPropagation();
+      }
+    }, true);
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', function () {
+      init();
+      initSummaryLinks();
+    });
   } else {
     init();
+    initSummaryLinks();
   }
 })();

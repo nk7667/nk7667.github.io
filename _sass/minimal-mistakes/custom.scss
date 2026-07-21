@@ -332,16 +332,16 @@ body {
     border-top: 1px solid #e4e4e7;
   }
 
-  /* 表格：可读性 + 宽表横向滚动（保持 display:block 以在窄屏出现滚动条） */
+  /* 表格：自适应宽度 + 宽表可横向滚动 */
   table {
     display: block;
-    width: 100%;
+    width: fit-content;
     max-width: 100%;
     overflow-x: auto;
     border-collapse: collapse;
     border-spacing: 0;
     -webkit-overflow-scrolling: touch;
-    margin: 1.35rem 0;
+    margin: 1.35rem auto;
     font-size: 0.925rem;
     line-height: 1.5;
     color: $color-text-primary;
@@ -1572,6 +1572,20 @@ body {
 .kb-nav__summary--sub {
   font-size: 0.8rem;
   font-weight: 600;
+}
+
+/* 目录 summary 内的链接：点击跳转介绍页，不干扰展开/折叠 */
+.kb-nav__summary-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.12s ease;
+}
+
+.kb-nav__summary-link:hover {
+  color: $color-accent-warm;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
 }
 
 .kb-nav__sub-item a {
