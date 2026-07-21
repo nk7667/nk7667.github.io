@@ -1,5 +1,5 @@
 {% assign titles = site.data.directory_titles %}
-{% assign posts_sorted = site.posts | sort: 'date' | reverse %}
+{% assign posts_sorted = site.posts | sort: 'date' %}
 
 {% assign current_path = page.path | default: '' %}
 {% assign current_url = page.url | relative_url %}

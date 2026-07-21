@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Nautilus (三)：后渗透与Token操作"
+title: "Nautilus (二)：后渗透与Token操作"
 date: 2026-07-08
 categories:
   - github项目
@@ -676,5 +676,5 @@ Web UI 中对应操作按钮：Screenshot / Keylog On/Off / Tokens / Steal Token
 
 ## 上一篇 / 下一篇
 
-- [Nautilus (二)：通信协议深度](2026-07-08-Nautilus\(二\)-通信协议深度.md)
-- [Nautilus (四)：免杀体系](2026-07-09-Nautilus\(四\)-免杀体系.md)
+- [Nautilus (一)：通信协议深度](2026-07-08-Nautilus(一)-通信协议深度.md)
+- [Nautilus (二)：免杀体系](2026-07-09-Nautilus(三)-免杀体系.md)
