@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "VulnScope：基于流水线的 DAST 黑盒扫描平台"
+title: "VulnScope：基于流水线的 DAST 黑盒引擎"
 date: 2026-07-09
 categories:
   - github项目
@@ -9,7 +9,9 @@ categories:
 
 ## VulnScope：基于流水线的 DAST 黑盒扫描平台
 
-[VulnScope](https://github.com/nk7667/VulnScope) 是一个 Go + Vue + Redis + MySQL 的黑盒漏洞扫描平台，后端通过 Asynq 将扫描动作拆成多阶段任务，由 Worker 异步消费，扫描引擎调用 nmap 和 nuclei。
+项目链接：[VulnScope](https://github.com/nk7667/VulnScope) 
+
+是一个 Go + Vue + Redis + MySQL 的黑盒漏洞扫描平台，后端通过 Asynq 将扫描动作拆成多阶段任务，由 Worker 异步消费，扫描引擎调用 nmap 和 nuclei。
 
 ### 架构
 
