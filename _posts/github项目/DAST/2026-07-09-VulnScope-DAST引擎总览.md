@@ -1,13 +1,11 @@
 ---
 layout: single
-title: "VulnScope：基于流水线的 DAST 黑盒引擎"
+title: "VulnScope： DAST 黑盒引擎总览"
 date: 2026-07-09
 categories:
   - github项目
   - DAST
 ---
-
-## VulnScope：基于流水线的 DAST 黑盒扫描平台
 
 项目链接：[VulnScope](https://github.com/nk7667/VulnScope) 
 
