@@ -21,4 +21,7 @@ anthropic-style-cn/
 *.code-workspace
 
 # 面经目录（仅本地保留，已迁移至私有仓库 blog_for_review，公开仓库不发布）
-_posts/owasp10常见问题/
+_posts/面试问题/
+
+# DAST 黑盒扫描思考笔记（仅本地保留）
+_posts/github项目/DAST/2026-07-10-黑盒扫描中的误报漏报与覆盖边界思考.md

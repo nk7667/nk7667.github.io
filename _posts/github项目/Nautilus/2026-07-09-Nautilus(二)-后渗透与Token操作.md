@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Nautilus (二)：后渗透与Token操作"
-date: 2026-07-08
+date: 2026-07-09
 categories:
   - github项目
   - Nautilus
@@ -42,7 +42,7 @@ Nautilus 调用（绕过）：
   用户代码 → rawSyscall12(SYSCALL) → 内核  ← 不经过任何被 hook 的 DLL
 ```
 
-所有 NT 函数通过 **Halo's Gate** 动态获取 SSN（System Service Number），再调用汇编 stub 直进入内核。12 参数汇编 stub 的实现细节属于免杀体系范畴，详见[第四章免杀体系](2026-07-09-Nautilus(四)-免杀体系.md)。
+所有 NT 函数通过 **Halo's Gate** 动态获取 SSN（System Service Number），再调用汇编 stub 直进入内核。12 参数汇编 stub 的实现细节属于免杀体系范畴，详见第三章免杀体系。
 
 ### 1.2 注入流程
 
@@ -76,7 +76,7 @@ func InjectShellcode(pid uint32, shellcode []byte) error {
 }
 ```
 
-注入链路：`NtOpenProcess → NtAVM → NtWVM → NtPVM → NtCreateThreadEx`，全程通过 Halo's Gate 直接 syscall（详见第四章免杀体系），不经过 ntdll.dll 的任何 EDR hook 点。
+注入链路：`NtOpenProcess → NtAVM → NtWVM → NtPVM → NtCreateThreadEx`，全程通过 Halo's Gate 直接 syscall（详见第三章免杀体系），不经过 ntdll.dll 的任何 EDR hook 点。
 
 ### 1.3 自注入模式
 
@@ -671,10 +671,3 @@ Web UI 中对应操作按钮：Screenshot / Keylog On/Off / Tokens / Steal Token
 | 凭据提取     |        ❌        |        ✅        |    ✅   |   ✅   |
 | 文件管理     |        ✅        |        ✅        |    ✅   |   ✅   |
 | Shell 执行 |        ✅        |        ✅        |    ✅   |   ✅   |
-
-***
-
-## 上一篇 / 下一篇
-
-- [Nautilus (一)：通信协议深度](2026-07-08-Nautilus(一)-通信协议深度.md)
-- [Nautilus (二)：免杀体系](2026-07-09-Nautilus(三)-免杀体系.md)
