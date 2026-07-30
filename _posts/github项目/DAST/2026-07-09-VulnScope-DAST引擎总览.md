@@ -1,178 +1,164 @@
 ---
 layout: single
-title: "VulnScope： DAST 黑盒引擎总览"
+title: "VulnScope：DAST 黑盒引擎总览"
 date: 2026-07-09
 categories:
   - github项目
   - DAST
 ---
 
-项目链接：[VulnScope](https://github.com/nk7667/VulnScope) 
+项目链接：[VulnScope](https://github.com/nk7667/VulnScope)
 
-是一个 Go + Vue + Redis + MySQL 的黑盒漏洞扫描平台，后端通过 Asynq 将扫描动作拆成多阶段任务，由 Worker 异步消费，扫描引擎调用 nmap 和 nuclei。
+VulnScope 是一个基于 Go + Vue + Redis + MySQL 的黑盒漏洞扫描平台，后端用 Asynq 拆为多阶段流水线，Worker 异步消费，底层调用 nmap 和 nuclei。
 
-### 架构
+### 架构总览
 
-```text
-用户 → API Server → Scheduler → Redis 队列 → Worker → 扫描器(nmap/nuclei)
-                                                   ↓
-                                             结果写入 MySQL
+```plantuml
+@startuml
+skinparam componentStyle rectangle
+skinparam rectangle {
+    BackgroundColor<<frontend>> #FFCDD2
+    BackgroundColor<<api>> #B3E5FC
+    BackgroundColor<<scanner>> #C8E6C9
+    BackgroundColor<<queue>> #FFF9C4
+    BackgroundColor<<storage>> #E8F5E9
+    BackgroundColor<<core>> #F3E5F5
+    BorderColor #333333
+    RoundCorner 10
+}
+skinparam arrow {
+    Color #666666
+}
+
+package "前端 (Vue 3 + Element Plus)" {
+    rectangle "目标管理\n──────\nIP/域名/网段\n批量导入\n分组/标签" as target_view <<frontend>>
+    rectangle "任务管理\n──────\n创建/查看\n进度跟踪\n取消/暂停" as task_view <<frontend>>
+    rectangle "资产管理\n──────\n资产列表\n端口/指纹\n存活状态" as asset_view <<frontend>>
+    rectangle "漏洞管理\n──────\n列表/筛选\n状态标记\n复测/导出" as vuln_view <<frontend>>
+    rectangle "模板管理\n──────\n同步/导入\n启用/禁用\n误报率统计" as template_view <<frontend>>
+}
+
+package "Go 服务 (单一代码库, 三种模式)" {
+    package "server 模式" {
+        rectangle "Gin API\n──────\nTarget/Task/Asset\nVuln/Template\nCORS + API Key" as api <<api>>
+        rectangle "Scheduler\n──────\nasynq.Client\n唯一入队入口\nasynq.Inspector\n阶段编排 + 取消" as sched <<core>>
+    }
+    package "worker 模式 (× N)" {
+        rectangle "Worker\n──────\nasynq.Server\n4级队列优先级\ncancelHandler\ntargetLimiters" as worker <<core>>
+        rectangle "domain\n──────\nDNS解析\n字典爆破" as dom <<scanner>>
+        rectangle "alive\n──────\nHTTP/TCP\n探测" as alv <<scanner>>
+        rectangle "port\n──────\nnmap\nCPE输出" as prt <<scanner>>
+        rectangle "finger\n──────\nnuclei\n指纹模板" as fgr <<scanner>>
+        rectangle "vuln\n──────\nnuclei\nCPE匹配\n误报治理" as vul <<scanner>>
+    }
+}
+
+queue "Redis\n──────\nAsynq 任务队列\nretest(9) high(6)\ndefault(3) low(1)\n──────────\ncancelled_tasks Set" as redis <<queue>>
+
+database "MySQL\n──────\ntargets / tasks\nassets / ports\nfingers / vulns\ntemplates / task_logs\nconfigs" as db <<storage>>
+
+note right of redis
+  <b>核心设计原则</b>
+
+  Scheduler 和 Worker 之间
+  唯一的通信方式是 Redis 队列。
+
+  -mode=all 时:
+  Scheduler 入队 → 本进程 Worker 从 Redis 拉取
+
+  -mode=server + worker 时:
+  Scheduler 入队 → 远程 Worker 从 Redis 拉取
+
+  两种模式数据流路径一致，
+  从第一天起就具备分布式能力。
+end note
+
+note right of worker
+  <b>阶段推进: 单目标粒度</b>
+
+  每个目标完成当前阶段后
+  立即入队下一阶段，不等待
+  其他目标。
+
+  不同 Worker 并行消费不同
+  目标的同一阶段任务，
+  天然负载均衡。
+
+  <b>cancelHandler</b>
+
+  取消时返回 SkipRetry，
+  避免 Asynq 按重试策略
+  重新拉起已取消的任务。
+end note
+
+note right of vul
+  <b>CPE 驱动模板匹配</b>
+
+  nmap 输出 CPE → go-cpe 库
+  WFN 匹配 Template.CPE →
+  筛选适用模板再执行
+
+  不是全量跑 nuclei 模板库
+
+  <b>误报自动治理</b>
+
+  累计判定 ≥5 次
+  误报率 ≥80% → 自动禁用
+end note
+
+' 数据流
+target_view --> api
+task_view --> api
+asset_view --> api
+vuln_view --> api
+template_view --> api
+api --> db : CRUD
+api --> sched : 创建任务
+sched --> redis : 入队
+redis --> worker : 消费
+worker --> dom
+worker --> alv
+worker --> prt
+worker --> fgr
+worker --> vul
+dom --> db : 写入
+alv --> db
+prt --> db
+fgr --> db
+vul --> db
+api --> db : 查询
+@enduml
 ```
-
-三种运行模式（[main.go](https://github.com/nk7667/VulnScope/blob/main/cmd/scanner/main.go)）：
-
-| 模式 | 启动参数 | 包含组件 |
-|------|---------|---------|
-| all | `-mode=all` | API + Worker |
-| server | `-mode=server` | 仅 API |
-| worker | `-mode=worker` | 仅 Worker |
-
-API 和 Worker 共享 Redis 和 MySQL，Worker 节点可独立扩容。
 
 ### 扫描流水线
 
-一次扫描拆为五段，按顺序执行：
+一次扫描拆为五个阶段，按顺序执行：
 
-```text
-domain（域名解析）→ alive（存活探测）→ port（端口扫描）→ finger（指纹识别）→ vuln（漏洞扫描）
-```
+| # | 阶段 | 说明 |
+|---|------|------|
+| 1 | domain | DNS 解析，将域名转为 IP |
+| 2 | alive | 存活探测，过滤掉不可达的目标 |
+| 3 | port | nmap 端口扫描，输出 CPE |
+| 4 | finger | nuclei 指纹识别，识别服务/框架 |
+| 5 | vuln | nuclei 漏洞扫描，CPE 匹配模板 |
 
-任务类型常量（[scheduler.go](https://github.com/nk7667/VulnScope/blob/main/internal/scheduler/scheduler.go#L19-L26)）：
+每个目标完成当前阶段后立即入队下一阶段，不等待同批其他目标——慢目标不会拖住快目标。入队前 Scheduler 检查队列 pending 数，超过 10000 时延迟 5 分钟，Worker 侧按 host 做 QPS 限速，并跳过 CIDR 排除列表和冷却期内的 IP。取消任务时 cancelHandler 返回 SkipRetry，避免 Asynq 把已取消的任务按重试策略重新拉起来。
 
-```go
-const (
-    TypeDomainScan = "scan:domain"
-    TypeAliveScan  = "scan:alive"
-    TypePortScan   = "scan:port"
-    TypeFingerScan = "scan:finger"
-    TypeVulnScan   = "scan:vuln"
-)
-```
+漏洞扫描不跑全量 nuclei 模板库。先拿 nmap 输出的 CPE 和 Service 通过 go-cpe 库做 WFN 匹配（[store.go](https://github.com/nk7667/VulnScope/blob/main/internal/store/store.go#L505-L519)），筛选出适用的模板后再调用 nuclei。每轮扫描结束后统计各模板的人工判定记录——误报率超过 80% 且累计判定 ≥5 次的模板自动禁用（[store.go](https://github.com/nk7667/VulnScope/blob/main/internal/store/store.go#L468-L501)）。
 
-每段完成后，Worker 通过回调 `EnqueueFunc`（[worker.go](https://github.com/nk7667/VulnScope/blob/main/internal/worker/worker.go#L26)）通知 Scheduler 将下一阶段任务入队。
+### 运行模式
 
-### 任务调度
+同一份代码编译出单一二进制，通过 `-mode` 参数切换（[main.go](https://github.com/nk7667/VulnScope/blob/main/cmd/scanner/main.go)）：
 
-Scheduler 是入队的唯一入口（[scheduler.go](https://github.com/nk7667/VulnScope/blob/main/internal/scheduler/scheduler.go#L38-L44)），持有 `asynq.Client`（入队）、`asynq.Inspector`（查询队列和取消任务）和 `redis.Client`（标记取消）。
+- `-mode=all`：API + Worker，单机部署
+- `-mode=server`：仅 API
+- `-mode=worker`：仅 Worker
 
-`EnqueueTask`（[scheduler.go](https://github.com/nk7667/VulnScope/blob/main/internal/scheduler/scheduler.go#L68-L123)）从数据库获取任务和目标准备入队。任务载荷为 `ScanPayload`（[scheduler.go](https://github.com/nk7667/VulnScope/blob/main/internal/scheduler/scheduler.go#L29-L35)）：
-
-```go
-type ScanPayload struct {
-    TaskID         uint     `json:"task_id"`
-    Targets        []string `json:"targets"`
-    TemplateIDs    []string `json:"template_ids,omitempty"`
-    IsRetest       bool     `json:"is_retest,omitempty"`
-    OriginalTaskID uint     `json:"original_task_id,omitempty"`
-}
-```
-
-#### 阶段推进：按单目标粒度入队
-
-`EnqueueNextStage`（[scheduler.go](https://github.com/nk7667/VulnScope/blob/main/internal/scheduler/scheduler.go#L208-L259)）不是将整批目标打包成一个任务，而是为每个目标单独创建一条队列任务：
-
-```go
-for _, target := range targets {
-    payload := ScanPayload{
-        TaskID:  taskID,
-        Targets: []string{target},
-    }
-    if err := s.enqueue(nextType, payload, 3); err != nil { continue }
-}
-```
-
-`vuln` 阶段完成后直接标记任务结束：
-
-```go
-case "vuln":
-    task.Status = "completed"
-    task.Progress = "done"
-    return s.store.UpdateTask(task)
-```
-
-#### 队列过载保护
-
-入队前检查目标队列 pending 数，超过 10000 时用 `asynq.ProcessIn` 延迟 5 分钟入队：
-
-```go
-const taskOverloadLimit = 10000
-queueInfo, _ := s.inspector.GetQueueInfo(queueName)
-if queueInfo.Pending > taskOverloadLimit {
-    task := asynq.NewTask(taskType, data,
-        asynq.Queue(queueName),
-        asynq.ProcessIn(5 * time.Minute))
-    s.client.Enqueue(task)
-}
-```
-
-### 任务消费
-
-Worker 在初始化时配置四级队列权重（[worker.go](https://github.com/nk7667/VulnScope/blob/main/internal/worker/worker.go#L49-L58)）：
-
-```go
-Queues: map[string]int{
-    "retest":  9,
-    "high":    6,
-    "default": 3,
-    "low":     1,
-}
-```
-
-五种扫描类型各注册一个处理器，每个 `handleXXX` 都通过 `cancelHandler` 包装（[worker.go](https://github.com/nk7667/VulnScope/blob/main/internal/worker/worker.go#L155-L168)）：实际工作在 goroutine 中执行，主线程监听 `ctx.Done()`，超时或取消时返回 `asynq.SkipRetry`。
-
-#### 以端口扫描为例
-
-`doPortScan`（[worker.go](https://github.com/nk7667/VulnScope/blob/main/internal/worker/worker.go#L404-L525)）流程：
-
-1. `isTaskCancelled` 检查取消状态（优先查 Redis Set，回退数据库）
-2. `isStageCompleted` 幂等检查
-3. 分离"已带端口的目标"和"需要扫描的目标"
-4. 对后者调用 `scanner.PortScan`（底层 nmap）
-5. 将开放端口展开为 `host:port` 格式，截断上限 30 个端口
-6. 结果入队下一阶段：`w.enqueue("port", p.TaskID, nextTargets)`
-
-每个目标完成后立即触发下一阶段。例如 `host:80` 和 `host:443` 会作为两个独立任务进入 `finger` 队列，由不同 Worker 并行消费。
-
-#### 漏洞扫描
-
-`doVulnScan`（[worker.go](https://github.com/nk7667/VulnScope/blob/main/internal/worker/worker.go#L652-L781)）需要先做模板匹配：
-
-1. 从端口扫描结果获取 CPE 和 Service
-2. 端口推断（如 3306 → mysql）和 HTTP 探测
-3. `GetMatchedVulnTemplates` 按 CPE/Service 筛选适用模板
-4. `VulnScanByService` 按 HTTP/TCP 分组调用 nuclei，结果写入 `CreateVuln`
-5. 扫描完成后 `DisableHighFalsePositiveTemplates` 自动禁用误报率 ≥ 80% 的模板
-
-#### 限速与过滤
-
-- **目标级 QPS 限速**（[worker.go](https://github.com/nk7667/VulnScope/blob/main/internal/worker/worker.go#L120-L148)）：按 host 维度 `rate.Limiter`，默认 10 QPS
-- **目标排除**：支持精确匹配、CIDR、子域名通配符
-- **端口排除**：按端口号黑名单过滤
-- **IP 冷却**：通过 Config 表记录上次扫描时间，冷却期内跳过
-
-### 任务生命周期
-
-**取消**（[scheduler.go](https://github.com/nk7667/VulnScope/blob/main/internal/scheduler/scheduler.go#L268-L322)）：遍历四个队列，`ListPendingTasks` 删除待执行任务，`ListActiveTasks` 取消执行中任务，同步标记 Redis Set 让 Worker 毫秒级感知。
-
-**暂停/恢复**：直接修改数据库任务状态。
-
-### 扫描器层
-
-五个阶段对应的扫描器（[internal/worker/scanner/](https://github.com/nk7667/VulnScope/tree/main/internal/worker/scanner)）：
-
-| 文件 | 阶段 | 底层工具 |
-|------|------|---------|
-| domain.go | 域名解析 | net.LookupHost |
-| alive.go | 存活探测 | HTTP/TCP 连接探测 |
-| port.go | 端口扫描 | nmap |
-| finger.go | 指纹识别 | nuclei |
-| vuln.go | 漏洞扫描 | nuclei |
-
-漏洞扫描支持按服务协议分组（`VulnScanByService`），HTTP 服务用 HTTP 模板，TCP 服务用 TCP 模板。
+API 和 Worker 共享 Redis 和 MySQL，Worker 加机器即可扩容，不改代码。
 
 ### 数据模型
 
-核心模型（[model.go](https://github.com/nk7667/VulnScope/blob/main/internal/model/model.go)）：
+核心表关系：Target 提供扫描入口 → Task 记录执行状态 → Asset 存储发现的资产，Asset 下挂 Port（含 nmap 输出的 CPE）、Finger（指纹信息）和 Vuln（漏洞结果）。Port.CPE 与 Template.CPE 通过 go-cpe 库做 WFN 匹配，决定对哪些资产跑哪些模板。Vuln 用 MD5(url:templateID) 做唯一索引去重。
 
 | 模型 | 说明 |
 |------|------|
@@ -186,6 +172,8 @@ Queues: map[string]int{
 | TaskLog | 任务日志（Stage / Level / Message） |
 
 ### 项目结构
+
+`internal/` 按职责分层，`cmd/scanner/` 为入口，`web/` 为前端独立目录。
 
 ```
 VulnScope/

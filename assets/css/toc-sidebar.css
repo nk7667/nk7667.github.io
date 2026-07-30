@@ -12,3 +12,80 @@
 .sidebar.sidebar--stacked nav.toc.toc--series .series-nav__posts a:visited {
   color: #3f3f46 !important;
 }
+
+/* 左右 TOC 菜单章节间分隔线 */
+nav.toc.toc--doc .toc__menu > li {
+  border-bottom: 1px solid #d4d4d8;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+nav.toc.toc--doc .toc__menu > li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+/* 全局 toc--doc 覆盖，避免已访问/当前状态变成浏览器默认淡蓝色 */
+nav.toc.toc--doc-right .toc__menu a,
+nav.toc.toc--doc-right .toc__menu a:link,
+nav.toc.toc--doc-right .toc__menu a:visited,
+nav.toc.toc--doc-right .toc__menu a:hover,
+nav.toc.toc--doc-right .toc__menu a:focus {
+  color: #3f3f46 !important;
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+
+nav.toc.toc--doc-right .toc__menu a:hover,
+nav.toc.toc--doc-right .toc__menu a:focus {
+  color: #18181b !important;
+  background: #f4f4f5 !important;
+  border-radius: 6px !important;
+}
+
+nav.toc.toc--doc-right .toc__menu > li > a,
+nav.toc.toc--doc-right .toc__menu > li > a:link,
+nav.toc.toc--doc-right .toc__menu > li > a:visited,
+nav.toc.toc--doc-right .toc__menu > li > a:hover,
+nav.toc.toc--doc-right .toc__menu > li > a:focus {
+  color: #18181b !important;
+}
+
+nav.toc.toc--doc-right .toc__menu li.active > a,
+nav.toc.toc--doc-right .toc__menu li.active > a:link,
+nav.toc.toc--doc-right .toc__menu li.active > a:visited,
+nav.toc.toc--doc-right .toc__menu li.active > a:hover,
+nav.toc.toc--doc-right .toc__menu li.active > a:focus,
+nav.toc.toc--doc-right .toc__menu a[aria-current="true"],
+nav.toc.toc--doc-right .toc__menu a[aria-current="true"]:link,
+nav.toc.toc--doc-right .toc__menu a[aria-current="true"]:visited,
+nav.toc.toc--doc-right .toc__menu a[aria-current="true"]:hover,
+nav.toc.toc--doc-right .toc__menu a[aria-current="true"]:focus {
+  color: #18181b !important;
+  background: #e4e4e7 !important;
+  border-radius: 6px !important;
+}
+
+nav.toc.toc--doc-right .toc__menu li.active ul a,
+nav.toc.toc--doc-right .toc__menu li.active ul a:link,
+nav.toc.toc--doc-right .toc__menu li.active ul a:visited,
+nav.toc.toc--doc-right .toc__menu li.active ul a:hover,
+nav.toc.toc--doc-right .toc__menu li.active ul a:focus {
+  color: #52525b !important;
+  background: transparent !important;
+}
+
+nav.toc.toc--doc-right .toc__menu ul li > a,
+nav.toc.toc--doc-right .toc__menu ul li > a:link,
+nav.toc.toc--doc-right .toc__menu ul li > a:visited,
+nav.toc.toc--doc-right .toc__menu ul li > a:hover,
+nav.toc.toc--doc-right .toc__menu ul li > a:focus {
+  color: #52525b !important;
+}
+
+nav.toc.toc--doc-right .toc__menu ul ul li > a,
+nav.toc.toc--doc-right .toc__menu ul ul li > a:link,
+nav.toc.toc--doc-right .toc__menu ul ul li > a:visited,
+nav.toc.toc--doc-right .toc__menu ul ul li > a:hover,
+nav.toc.toc--doc-right .toc__menu ul ul li > a:focus {
+  color: #71717a !important;
+}

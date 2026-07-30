@@ -25,3 +25,11 @@ _posts/面试问题/
 
 # DAST 黑盒扫描思考笔记（仅本地保留）
 _posts/github项目/DAST/2026-07-10-黑盒扫描中的误报漏报与覆盖边界思考.md
+
+# JVM 崩溃日志（Eclipse JDT LS OOM）
+hs_err_pid*.log
+replay_pid*.log
+
+# JVM 崩溃日志（Eclipse JDT LS OOM）
+hs_err_pid*.log
+replay_pid*.log

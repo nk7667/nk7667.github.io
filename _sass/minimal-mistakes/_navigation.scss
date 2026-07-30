@@ -560,13 +560,19 @@
     }
   }
 
-  li ul > li a {
+  li ul > li a,
+  li ul > li a:link,
+  li ul > li a:visited {
     padding-left: 1.25rem;
     font-weight: normal;
+    color: $gray;
   }
 
-  li ul li ul > li a {
+  li ul li ul > li a,
+  li ul li ul > li a:link,
+  li ul li ul > li a:visited {
     padding-left: 1.75rem;
+    color: $gray;
   }
 
   li ul li ul li ul > li a {

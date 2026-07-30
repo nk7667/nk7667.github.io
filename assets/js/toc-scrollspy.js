@@ -9,6 +9,8 @@
   };
 
   const setActive = (nav, link) => {
+    if (!nav) return;
+
     const links = nav.querySelectorAll(".toc__menu a[href^='#']");
     links.forEach((a) => a.removeAttribute("aria-current"));
 
@@ -76,7 +78,7 @@
   };
 
   const init = () => {
-    const navs = document.querySelectorAll(".sidebar--stacked nav.toc.toc--doc");
+    const navs = document.querySelectorAll("nav.toc.toc--doc");
     navs.forEach(initOneNav);
   };
 

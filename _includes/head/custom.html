@@ -11,6 +11,77 @@
 
 <link rel="stylesheet" href="{{ '/assets/css/toc-sidebar.css' | relative_url }}?v={{ asset_v }}">
 <link rel="stylesheet" href="{{ '/assets/css/layout-article.css' | relative_url }}?v={{ asset_v }}">
+<script>
+  (function () {
+    if (document.querySelector('.page__content')) return;
+    var stub = document.createElement('div');
+    stub.className = 'page__content';
+    stub.hidden = true;
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!document.querySelector('.page__content')) {
+        document.body.appendChild(stub);
+      }
+    });
+  })();
+</script>
+<style>
+  nav.toc.toc--doc-right .toc__menu a,
+  nav.toc.toc--doc-right .toc__menu a:link,
+  nav.toc.toc--doc-right .toc__menu a:visited,
+  nav.toc.toc--doc-right .toc__menu a:hover,
+  nav.toc.toc--doc-right .toc__menu a:focus {
+    color: #52525b !important;
+    -webkit-text-fill-color: #52525b !important;
+  }
+
+  nav.toc.toc--doc-right .toc__menu > li > a,
+  nav.toc.toc--doc-right .toc__menu > li > a:link,
+  nav.toc.toc--doc-right .toc__menu > li > a:visited,
+  nav.toc.toc--doc-right .toc__menu > li > a:hover,
+  nav.toc.toc--doc-right .toc__menu > li > a:focus,
+  nav.toc.toc--doc-right .toc__menu li.active > a,
+  nav.toc.toc--doc-right .toc__menu li.active > a:link,
+  nav.toc.toc--doc-right .toc__menu li.active > a:visited,
+  nav.toc.toc--doc-right .toc__menu li.active > a:hover,
+  nav.toc.toc--doc-right .toc__menu li.active > a:focus,
+  nav.toc.toc--doc-right .toc__menu a[aria-current="true"],
+  nav.toc.toc--doc-right .toc__menu a[aria-current="true"]:link,
+  nav.toc.toc--doc-right .toc__menu a[aria-current="true"]:visited,
+  nav.toc.toc--doc-right .toc__menu a[aria-current="true"]:hover,
+  nav.toc.toc--doc-right .toc__menu a[aria-current="true"]:focus,
+  nav.toc.toc--doc-right .toc__menu .active > a,
+  nav.toc.toc--doc-right .toc__menu .active > a:link,
+  nav.toc.toc--doc-right .toc__menu .active > a:visited,
+  nav.toc.toc--doc-right .toc__menu .active > a:hover,
+  nav.toc.toc--doc-right .toc__menu .active > a:focus,
+  nav.toc.toc--doc-right .toc__menu .active a,
+  nav.toc.toc--doc-right .toc__menu .active a:link,
+  nav.toc.toc--doc-right .toc__menu .active a:visited,
+  nav.toc.toc--doc-right .toc__menu .active a:hover,
+  nav.toc.toc--doc-right .toc__menu .active a:focus {
+    background-color: transparent !important;
+    color: #18181b !important;
+    -webkit-text-fill-color: #18181b !important;
+  }
+
+  nav.toc.toc--doc-right .toc__menu ul li > a,
+  nav.toc.toc--doc-right .toc__menu ul li > a:link,
+  nav.toc.toc--doc-right .toc__menu ul li > a:visited,
+  nav.toc.toc--doc-right .toc__menu ul li > a:hover,
+  nav.toc.toc--doc-right .toc__menu ul li > a:focus {
+    color: #52525b !important;
+    -webkit-text-fill-color: #52525b !important;
+  }
+
+  nav.toc.toc--doc-right .toc__menu ul ul li > a,
+  nav.toc.toc--doc-right .toc__menu ul ul li > a:link,
+  nav.toc.toc--doc-right .toc__menu ul ul li > a:visited,
+  nav.toc.toc--doc-right .toc__menu ul ul li > a:hover,
+  nav.toc.toc--doc-right .toc__menu ul ul li > a:focus {
+    color: #71717a !important;
+    -webkit-text-fill-color: #71717a !important;
+  }
+</style>
 
 {%- comment -%}
   CSP: block inline scripts & event handlers (e.g. <img onerror=...>).
@@ -25,3 +96,19 @@
 <script src="{{ '/assets/js/code-copy.js' | relative_url }}?v={{ asset_v }}" defer></script>
 <script src="{{ '/assets/js/sidebar-toggle.js' | relative_url }}?v={{ asset_v }}" defer></script>
 <script src="{{ '/assets/js/toc-scrollspy.js' | relative_url }}?v={{ asset_v }}" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var root = document.querySelector('.page__content');
+    if (!root) return;
+    root.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(function (heading) {
+      var id = heading.getAttribute('id');
+      if (!id || heading.querySelector('.header-link')) return;
+      var link = document.createElement('a');
+      link.className = 'header-link';
+      link.href = '#' + id;
+      link.innerHTML = '<span class="sr-only">Permalink</span><i class="fas fa-link"></i>';
+      link.title = 'Permalink';
+      heading.appendChild(link);
+    });
+  });
+</script>
