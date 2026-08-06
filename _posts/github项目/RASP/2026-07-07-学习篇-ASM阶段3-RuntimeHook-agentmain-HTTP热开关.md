@@ -10,11 +10,10 @@ categories:
 
 ## ASM 阶段 3：Runtime Hook + agentmain + HTTP 热开关
 
-[阶段 2](./2026-07-07-学习篇-ASM阶段2-检测逻辑注入与Bootstrap类加载.md) 实现了一个可运行的 RASP Agent，但还有三个缺陷：
+[阶段 2](./2026-07-07-学习篇-ASM阶段2-检测逻辑注入与Bootstrap类加载.md) 实现了一个可运行的 RASP Agent，但还有两个缺陷：
 
-1. 只 Hook 了 `ProcessBuilder.start()` —— 攻击者可以用 `Runtime.exec()` 绕过
-2. 只能通过 `-javaagent` 启动时加载 —— 已经在跑的 JVM 无法注入
-3. 热开关靠 `System.setProperty` —— 运维没法远程控制
+1. 只能通过 `-javaagent` 启动时加载 —— 已经在跑的 JVM 无法注入
+2. 热开关靠 `System.setProperty` —— 运维没法远程控制
 
 > **前置知识**：[阶段 1](./2026-07-07-学习篇-ASM阶段1-Visitor模式与基础插桩.md) 的 Visitor 链和 `visitCode()` 插入时机；[阶段 2](./2026-07-07-学习篇-ASM阶段2-检测逻辑注入与Bootstrap类加载.md) 的条件跳转、局部变量、Bootstrap 可见性。
 
@@ -78,7 +77,7 @@ javaagent-asm-lab-stage3/
 
 #### 目标
 
-阶段 2 只 Hook 了 `ProcessBuilder.start()`。但 `Runtime.getRuntime().exec("cmd")` 也能执行命令，而且是更常见的用法。不 Hook 它存在漏报。
+阶段 2 只 Hook 了 `ProcessBuilder.start()`。虽然 `Runtime.exec()` 底层调用 `ProcessBuilder.start()`，在 premain 场景下已被拦截，但 `Runtime.exec()` 是更常见的用法，且 agentmain 场景下 ProcessBuilder 可能已加载，直接 Hook Runtime 实现双重防线更可靠。
 
 #### 实现
 
@@ -142,7 +141,7 @@ at ProcessBuilder.start(ProcessBuilder.java)     ← 阶段 2 的 Hook
 at Runtime.exec(Runtime.java:681)                ← 阶段 3 的 Hook
 ```
 
-`Runtime.exec()` 内部创建了 `ProcessBuilder` 并调用 `start()`。两个 Hook 同时生效——如果攻击者绕过 `exec()` 直接用 `new ProcessBuilder().start()`，`start()` 的 Hook 仍然会生效。
+`Runtime.exec()` 内部创建了 `ProcessBuilder` 并调用 `start()`，所以两个 Hook 同时生效。这不是在修一个"漏报漏洞"——premain 场景下 Hook `ProcessBuilder.start()` 已经覆盖了 `Runtime.exec()`。直接 Hook `Runtime.exec()` 的意义在于**防御深度**：agentmain 场景下 `ProcessBuilder` 可能已经被加载、Hook 时机更晚，多一层 Runtime Hook 确保无论从哪个入口调用都能被拦截。
 
 ***
 
@@ -198,6 +197,7 @@ vm.detach();
 
 #### premain vs agentmain 适用场景
 
+| 维度 | premain | agentmain |
 |---|:---|:---|
 | 触发时机 | JVM 启动时 | 运行时 |
 | 适用场景 | 开发测试、CI/CD | 生产应急响应 |
