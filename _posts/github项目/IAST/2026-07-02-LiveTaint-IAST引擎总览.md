@@ -92,7 +92,7 @@ server -> ui : 漏洞列表 + 统计
 
 ### 2.1 漏洞详情页
 
-![漏洞详情页面](image.png)
+![漏洞详情页面](/assets/images/livetaint-vuln-detail.png)
 
 ***
 

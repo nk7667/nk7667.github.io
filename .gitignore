@@ -1,4 +1,4 @@
-_site/
+﻿_site/
 .sass-cache/
 .jekyll-cache/
 .jekyll-metadata
@@ -30,6 +30,7 @@ _posts/github项目/DAST/2026-07-10-黑盒扫描中的误报漏报与覆盖边�
 hs_err_pid*.log
 replay_pid*.log
 
-# JVM 崩溃日志（Eclipse JDT LS OOM）
-hs_err_pid*.log
-replay_pid*.log
+# PlantUML 本地渲染（jar + 构建产物不提交，教程见 PLANTUML_GUIDE.md）
+plantuml.jar
+assets/plantuml/
+PLANTUML_GUIDE.md

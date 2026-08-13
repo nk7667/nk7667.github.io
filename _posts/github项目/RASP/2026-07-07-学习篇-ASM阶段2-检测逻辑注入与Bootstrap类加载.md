@@ -275,9 +275,7 @@ static class StartMethodVisitor extends MethodVisitor {
 
 #### 6.3 为什么用 `String.join` 而不是 `StringBuilder`
 
-阶段 1 只
-
-注入静态字符串，不需要拼接。阶段 2 需要把 `List<String>` 拼成完整命令。`String.join` 是最短的字节码实现——`LDC` 一个分隔符 + `ALOAD` 列表 + 一次 `INVOKESTATIC`，总共 3 条指令。如果用 `StringBuilder` 循环 append，需要十几条指令加一个循环结构，在 `visitCode()` 入口写循环非常不直观。
+阶段 1 只注入静态字符串，不需要拼接。阶段 2 需要把 `List<String>` 拼成完整命令。`String.join` 是最短的字节码实现——`LDC` 一个分隔符 + `ALOAD` 列表 + 一次 `INVOKESTATIC`，总共 3 条指令。如果用 `StringBuilder` 循环 append，需要十几条指令加一个循环结构，在 `visitCode()` 入口写循环非常不直观。
 
 #### 6.4 局部变量表：ASTORE/ALOAD 与 Slot 分配
 

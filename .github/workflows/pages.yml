@@ -1,4 +1,4 @@
-name: Deploy Jekyll site to Pages
+﻿name: Deploy Jekyll site to Pages
 
 on:
   push:
@@ -32,6 +32,12 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
+
+      - name: Download PlantUML
+        run: wget -q https://repo1.maven.org/maven2/net/sourceforge/plantuml/plantuml/1.2025.2/plantuml-1.2025.2.jar -O plantuml.jar
+
+      - name: Pre-render PlantUML diagrams
+        run: ruby _scripts/prebuild_plantuml.rb
 
       - name: Build site
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"

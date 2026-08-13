@@ -6,7 +6,7 @@ categories:
   - java反序列化
 ---
 
-Fastjson 是阿里巴巴开源的 JSON 解析库，在国内 Java 生态中使用极广。由于其强大的 `AutoType` 功能（允许 JSON 中通过 `@type` 指定类名自动反序列化），也让它成为了安全研究员的重点关注对象。
+Fastjson 是阿里巴巴开源的 JSON 解析库，在国内 Java 生态中使用极广。它的 `AutoType` 功能允许 JSON 中通过 `@type` 指定类名进行自动反序列化——这个设计初衷是为了方便，但也因此打开了攻击面。
 
 ***
 

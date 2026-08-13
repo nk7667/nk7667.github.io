@@ -1,4 +1,4 @@
-/* Minimal Mistakes 之上：本仓库「阅读/代码」主题（目录 + 代码块） */
+﻿/* Minimal Mistakes 之上：本仓库「阅读/代码」主题（目录 + 代码块） */
 
 @import "minimal-mistakes/_anthropic-tokens";
 
@@ -896,6 +896,12 @@ body {
 
 .page__pagination a:hover {
   color: #18181b;
+}
+
+/* ── PlantUML 代码块初始隐藏，等 JS 替换为 SVG ── */
+div.language-plantuml.highlighter-rouge,
+pre:has(> code.language-plantuml) {
+  opacity: 0;
 }
 
 /* ── PlantUML 图表：干净无边框，白色背景 ── */
